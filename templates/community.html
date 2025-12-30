@@ -2,78 +2,57 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | ساحة التفاعل</title>
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | المجتمع</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
         body { background: #00050a; color: #fff; font-family: 'Tajawal', sans-serif; }
-        .glass-card { background: rgba(0, 20, 40, 0.6); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(15px); }
-        .blue-glow { color: #00d4ff; text-shadow: 0 0 10px rgba(0, 212, 255, 0.5); }
-        .btn-blue { background: linear-gradient(90deg, #0066ff, #00d4ff); }
+        .brand-small {
+            filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%);
+            font-size: 1.5rem; font-weight: 900;
+        }
+        .glass-card { background: rgba(0, 20, 40, 0.6); border: 1px solid rgba(0, 212, 255, 0.2); }
     </style>
 </head>
-<body class="p-4 md:p-10">
-
-    <nav class="max-w-4xl mx-auto flex justify-between items-center mb-12 border-b border-blue-900/30 pb-6">
-        <h1 class="text-3xl font-black blue-glow">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-        <div class="flex items-center gap-3">
-            <span class="text-xs text-green-400 animate-pulse">● السيرفر نشط</span>
-            <img src="https://flagcdn.com/w40/dz.png" class="rounded shadow-lg">
-        </div>
+<body class="p-4 md:p-10 flex flex-col items-center">
+    <nav class="w-full max-w-2xl flex justify-between items-center mb-10">
+        <span class="brand-small">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</span>
+        <img src="https://flagcdn.com/w40/dz.png" class="rounded shadow-sm">
     </nav>
 
-    <main class="max-w-2xl mx-auto space-y-10">
-        
-        <div class="glass-card p-6 rounded-[2.5rem]">
-            <textarea id="postInput" placeholder="اكتب رسالة للمجتمع..." 
-                class="w-full bg-black/50 border border-blue-900/50 p-4 rounded-2xl h-28 outline-none focus:border-blue-400 transition text-sm text-white"></textarea>
-            <div class="flex justify-end mt-4">
-                <button onclick="publishPost()" class="btn-blue px-10 py-3 rounded-xl font-bold shadow-lg shadow-blue-500/20 active:scale-95 transition">
-                    نشر الآن 🚀
-                </button>
-            </div>
+    <main class="w-full max-w-xl space-y-8">
+        <div class="glass-card p-6 rounded-[2rem]">
+            <textarea id="postContent" placeholder="اكتب رسالتك للمجتمع..." class="w-full bg-black/50 border border-blue-900/40 p-4 rounded-2xl h-24 text-sm outline-none focus:border-blue-400"></textarea>
+            <button onclick="sendPost()" class="w-full mt-4 bg-blue-600 py-3 rounded-xl font-bold">نشر في الساحة 🚀</button>
         </div>
 
-        <div id="postsContainer" class="space-y-6">
-            </div>
+        <div id="postsFeed" class="space-y-4"></div>
     </main>
 
     <script>
-        async function loadPosts() {
-            const response = await fetch('/api/posts');
-            const posts = await response.json();
-            const container = document.getElementById('postsContainer');
-            container.innerHTML = '';
-            
-            posts.forEach(post => {
-                container.innerHTML += `
-                    <div class="glass-card p-6 rounded-[2rem] border-r-4 border-r-blue-500">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-blue-400 font-bold">${post.user}</span>
-                            <button class="text-xs text-slate-500 hover:text-red-400 transition">❤ ${post.likes}</button>
-                        </div>
-                        <p class="text-slate-200 text-sm leading-relaxed">${post.content}</p>
-                    </div>
-                `;
-            });
+        async function fetchPosts() {
+            const res = await fetch('/api/posts');
+            const data = await res.json();
+            const feed = document.getElementById('postsFeed');
+            feed.innerHTML = data.map(p => `
+                <div class="glass-card p-6 rounded-[2rem] border-r-2 border-blue-500">
+                    <div class="flex justify-between text-[10px] text-blue-400 mb-2"><span>${p.user}</span><span>❤ ${p.likes}</span></div>
+                    <p class="text-sm text-slate-200">${p.content}</p>
+                </div>
+            `).join('');
         }
 
-        async function publishPost() {
-            const content = document.getElementById('postInput').value;
-            if(!content) return alert("اكتب شيئاً أولاً!");
-
+        async function sendPost() {
+            const content = document.getElementById('postContent').value;
+            if(!content) return;
             await fetch('/api/posts', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({content})
             });
-
-            document.getElementById('postInput').value = '';
-            loadPosts(); // تحديث القائمة
+            document.getElementById('postContent').value = '';
+            fetchPosts();
         }
-
-        // تحميل المنشورات عند فتح الصفحة
-        loadPosts();
+        fetchPosts();
     </script>
 </body>
 </html>
