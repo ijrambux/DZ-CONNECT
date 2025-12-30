@@ -1,25 +1,74 @@
-<div id="ai-assistant" class="fixed bottom-10 left-10 w-80 bg-slate-900 border border-blue-500 rounded-3xl shadow-2xl overflow-hidden hidden">
-    <div class="bg-blue-600 p-4 font-bold text-center">مساعد DZ-CONNECT الذكي</div>
-    <div id="chat-box" class="h-64 p-4 overflow-y-auto text-sm space-y-2">
-        <p class="text-blue-300">مرحباً! أنا ذكاء DZ-CONNECT الاصطناعي، كيف يمكنني خدمتك في مجتمعنا؟</p>
-    </div>
-    <div class="p-2 border-t border-slate-700 flex">
-        <input type="text" id="user-msg" class="bg-black border-none w-full p-2 outline-none text-xs" placeholder="اسألني أي شيء...">
-        <button onclick="aiAsk()" class="p-2 text-blue-400">➤</button>
-    </div>
-</div>
-
-<script>
-    function aiAsk() {
-        const msg = document.getElementById('user-msg').value;
-        const chat = document.getElementById('chat-box');
-        if(msg) {
-            chat.innerHTML += `<p class="text-white text-right font-bold">أنت: ${msg}</p>`;
-            chat.innerHTML += `<p class="text-green-400">الذكاء: شكراً لسؤالك! فكرتك وصلت لمصطفى (MisterAI) ونحن نعمل على تطوير الرد التلقائي الكامل.</p>`;
-            document.getElementById('user-msg').value = '';
-            chat.scrollTop = chat.scrollHeight;
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مجتمع DZ-CONNECT | الذكاء الاصطناعي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #000814; color: #fff; font-family: 'Tajawal', sans-serif; }
+        .glass-chat {
+            background: rgba(0, 20, 40, 0.8);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 30px rgba(0, 119, 255, 0.2);
         }
-    }
-    // إظهار البوت بعد 3 ثواني لإبهار المستخدم
-    setTimeout(() => document.getElementById('ai-assistant').classList.remove('hidden'), 3000);
-</script>
+        .ai-glow { text-shadow: 0 0 10px #00d4ff; color: #00d4ff; }
+        .user-bubble { background: rgba(0, 119, 255, 0.2); border-radius: 15px 15px 0 15px; }
+        .ai-bubble { background: rgba(16, 185, 129, 0.1); border-radius: 15px 15px 15px 0; border: 1px solid #10b981; }
+    </style>
+</head>
+<body class="flex flex-col items-center p-6 min-h-screen">
+
+    <nav class="w-full max-w-5xl flex justify-between items-center mb-10 border-b border-blue-900/40 pb-4">
+        <h1 class="text-2xl font-black ai-glow tracking-tighter">DZ-CONNECT COMMUNITY</h1>
+        <img src="https://flagcdn.com/w40/dz.png" class="rounded shadow-lg">
+    </nav>
+
+    <div class="max-w-2xl w-full glass-chat rounded-[2.5rem] overflow-hidden flex flex-col h-[600px]">
+        <div class="bg-blue-600/20 p-5 border-b border-blue-500/30 flex items-center gap-3">
+            <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+            <span class="font-bold text-blue-400">المساعد الذكي (نسخة تجريبية)</span>
+        </div>
+
+        <div id="chat-box" class="flex-grow p-6 overflow-y-auto space-y-4">
+            <div class="ai-bubble p-4 max-w-[80%] text-sm leading-relaxed">
+                مرحباً بك في مجتمع <strong>DZ-CONNECT</strong>! أنا ذكاء المنصة الاصطناعي. لقد صممني مصطفى (MisterAI) لأبرهن أننا قادرون على بناء تكنولوجيا سيادية. كيف يمكنني مساعدتك؟
+            </div>
+        </div>
+
+        <div class="p-4 bg-black/40 border-t border-blue-900/30 flex gap-2">
+            <input type="text" id="user-input" placeholder="اكتب رسالتك للمجتمع أو اسأل الذكاء..." 
+                class="bg-transparent border border-blue-900/50 w-full p-4 rounded-2xl outline-none focus:border-blue-400 transition text-sm">
+            <button onclick="sendMessage()" class="bg-blue-600 hover:bg-blue-500 px-6 rounded-2xl transition-all">
+                <span class="text-xl">➤</span>
+            </button>
+        </div>
+    </div>
+
+    <p class="mt-8 text-slate-500 text-[10px] uppercase tracking-widest italic">
+        "هذا مجرد مثال.. والباقي عليكم" - MisterAI
+    </p>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const chatBox = document.getElementById('chat-box');
+            
+            if(input.value.trim() !== "") {
+                // رسالة المستخدم
+                chatBox.innerHTML += `<div class="flex justify-end"><div class="user-bubble p-4 max-w-[80%] text-sm text-right">${input.value}</div></div>`;
+                
+                // رد البوت (تجريبي)
+                setTimeout(() => {
+                    chatBox.innerHTML += `<div class="ai-bubble p-4 max-w-[80%] text-sm">رسالتك قيد المعالجة في سيرفراتنا المؤمنة. شكراً لمساهمتك في بناء أول منصة جزائرية سيادية! 🇩🇿</div>`;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }, 1000);
+
+                input.value = "";
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>
