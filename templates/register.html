@@ -1,100 +1,46 @@
-import os
-import random
-import shutil
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
-
-app = Flask(__name__, template_folder='templates', static_folder='static')
-app.secret_key = "dz_connect_sovereign_2025"
-
-# --- معالجة ذكية لمجلد الصوت لمنع توقف زر التسجيل ---
-static_path = os.path.join(app.root_path, 'static')
-audio_path = os.path.join(static_path, 'audio')
-
-if not os.path.exists(static_path):
-    os.makedirs(static_path)
-
-# حذف الملف الخاطئ الذي يظهر في صورتك وتحويله لمجلد
-if os.path.exists(audio_path) and not os.path.isdir(audio_path):
-    os.remove(audio_path)
-
-if not os.path.exists(audio_path):
-    os.makedirs(audio_path)
-
-app.config['UPLOAD_FOLDER'] = audio_path
-chat_history = []
-
-@app.route('/')
-def index(): return render_template('index.html')
-
-@app.route('/join')
-def join(): return render_template('register.html')
-
-@app.route('/verify')
-def verify(): return render_template('verify.html')
-
-@app.route('/settings')
-def settings():
-    if 'temp_nick' not in session: return redirect(url_for('join'))
-    return render_template('settings.html')
-
-@app.route('/hub')
-def hub():
-    if 'nickname' not in session: return redirect(url_for('join'))
-    return render_template('hub.html')
-
-# --- محرك التحقق (API) الذي يستقبله زر التسجيل ---
-@app.route('/api/auth', methods=['POST'])
-def auth():
-    data = request.json
-    nick = data.get('nickname', '').strip()
-    phone = data.get('phone', '').strip()
-    
-    # تنظيف الرقم وتوحيده
-    clean_phone = phone.replace('+213', '').replace(' ', '')
-    if clean_phone.startswith('0'): clean_phone = clean_phone[1:]
-    
-    # شرط الرقم الجزائري
-    is_valid = len(clean_phone) == 9 and clean_phone[0] in ['5', '6', '7']
-    
-    if not is_valid:
-        return jsonify({"status": "error", "message": "Invalid Algerian Number!"}), 403
-
-    # حماية اسمك المستعار
-    if nick.lower() == "misterai" and clean_phone != "554014890": 
-        return jsonify({"status": "error", "message": "Admin Reserved!"}), 403
-    
-    session['temp_nick'] = nick
-    session['temp_phone'] = "+213" + clean_phone
-    session['v_code'] = "1234"
-    return jsonify({"status": "success", "url": "/verify"})
-
-@app.route('/api/verify_code', methods=['POST'])
-def verify_code():
-    if request.json.get('code') == session.get('v_code'):
-        return jsonify({"status": "success", "url": "/settings"})
-    return jsonify({"status": "error", "message": "Wrong Code!"}), 400
-
-@app.route('/api/finalize', methods=['POST'])
-def finalize():
-    session['nickname'] = session.get('temp_nick')
-    return jsonify({"status": "success", "url": "/hub"})
-
-@app.route('/api/chat', methods=['GET', 'POST'])
-def chat():
-    if request.method == 'POST':
-        user = session.get('nickname', 'Guest')
-        is_admin = (user.lower() == "misterai")
-        if request.is_json:
-            msg = request.json.get('msg')
-            if msg: chat_history.append({"user": user, "text": msg, "admin": is_admin, "type": "text"})
-        elif 'audio' in request.files:
-            audio_file = request.files['audio']
-            filename = f"{user}_{random.randint(1000, 9999)}.webm"
-            audio_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            chat_history.append({"user": user, "audio_url": f"/static/audio/{filename}", "admin": is_admin, "type": "audio"})
-        if len(chat_history) > 30: chat_history.pop(0)
-        return jsonify({"status": "ok"})
-    return jsonify(chat_history)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #000; color: white; display: flex; align-items: center; justify-content: center; min-height: screen; }
+        .card { background: rgba(0, 20, 40, 0.8); padding: 40px; border-radius: 30px; border: 1px solid #1e3a8a; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="card w-full max-w-sm text-center">
+        <h2 class="text-xl font-black mb-6 text-blue-400 uppercase tracking-tighter">Access Portal</h2>
+        <div class="space-y-4">
+            <input id="nick" type="text" placeholder="Nickname" class="w-full p-4 rounded-2xl bg-white text-black text-center font-bold outline-none">
+            <div class="flex gap-2">
+                <div class="bg-blue-900/50 px-4 flex items-center rounded-2xl font-bold text-blue-400 border border-blue-500/20">+213</div>
+                <input id="phone" type="text" placeholder="5 / 6 / 7 XXXXXXXX" class="flex-grow p-4 rounded-2xl bg-white text-black text-center font-bold outline-none">
+            </div>
+            <button id="btn" onclick="start()" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-bold text-lg active:scale-95 transition-all">REQUEST ACCESS</button>
+        </div>
+    </div>
+    <script>
+        async function start() {
+            const b = document.getElementById('btn');
+            b.innerText = "Processing..."; b.disabled = true;
+            
+            const n = document.getElementById('nick').value;
+            const p = document.getElementById('phone').value;
+            
+            try {
+                const res = await fetch('/api/auth', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({nickname: n, phone: p})
+                });
+                const data = await res.json();
+                if(res.ok) window.location.href = data.url; 
+                else { alert(data.message); b.innerText = "REQUEST ACCESS"; b.disabled = false; }
+            } catch(e) { alert("Server Error! Check your internet."); b.innerText = "REQUEST ACCESS"; b.disabled = false; }
+        }
+    </script>
+</body>
+</html>
