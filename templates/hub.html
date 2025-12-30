@@ -5,51 +5,48 @@
     <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #00050a; color: #fff; }
-        .glass-panel { background: rgba(0, 20, 40, 0.6); border: 1px solid rgba(0, 212, 255, 0.1); }
-        .brand-mini { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-weight: 900; }
+        body { background: #00050a; color: white; font-family: sans-serif; }
+        .brand { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-weight: 900; }
+        .admin-msg { background: rgba(255, 215, 0, 0.1); border-right: 4px solid gold; }
     </style>
 </head>
-<body class="p-4 md:p-8">
-    <nav class="max-w-6xl mx-auto flex justify-between items-center mb-8">
-        <h1 class="text-2xl brand-mini">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-        <div class="text-xs text-blue-400">Global Connectivity Hub</div>
-    </nav>
-    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 h-[70vh]">
-        <div class="lg:col-span-1 glass-panel rounded-[2rem] p-6 flex flex-col">
-            <h2 class="text-blue-400 font-bold mb-4">● Live Chat</h2>
-            <div id="c" class="flex-grow overflow-y-auto space-y-2 mb-4 text-xs pr-2"></div>
-            <div class="flex gap-2">
-                <input id="m" type="text" placeholder="Say something..." class="w-full bg-black/40 border border-blue-900/30 p-3 rounded-xl text-xs outline-none">
-                <button onclick="send()" class="bg-blue-600 px-5 rounded-xl">➤</button>
+<body class="p-6">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="brand text-3xl mb-8">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-blue-900/10 p-8 rounded-3xl border border-blue-500/10">
+                <h2 class="text-2xl font-bold mb-4">Official Announcement 📢</h2>
+                <p class="text-slate-400">Welcome to the first secure Algerian Hub. Feel free to discuss tech and innovation in English!</p>
             </div>
-        </div>
-        <div class="lg:col-span-2 glass-panel rounded-[2rem] p-8 overflow-y-auto">
-            <h2 class="text-2xl font-bold mb-4">The Innovation Forum</h2>
-            <div class="p-6 bg-blue-900/10 rounded-3xl border-l-4 border-blue-500">
-                <p class="text-sm text-slate-300">Welcome to the English Hub. All old messages have been purged to start our sovereign journey fresh. Discuss the future here!</p>
+            <div class="bg-black/50 p-6 rounded-3xl border border-blue-500/10 h-[500px] flex flex-col">
+                <div id="box" class="flex-grow overflow-y-auto space-y-3 mb-4 pr-2 text-xs"></div>
+                <div class="flex gap-1 mb-2">
+                    <button onclick="add('🇩🇿')">🇩🇿</button><button onclick="add('🔥')">🔥</button><button onclick="add('🚀')">🚀</button>
+                </div>
+                <div class="flex gap-2">
+                    <input id="m" type="text" placeholder="Type..." class="w-full bg-blue-900/20 p-3 rounded-xl outline-none border border-blue-500/10">
+                    <button onclick="send()" class="bg-blue-600 px-4 rounded-xl">➤</button>
+                </div>
             </div>
         </div>
     </div>
     <script>
-        async function update() {
-            const res = await fetch('/api/messages');
-            const data = await res.json();
-            document.getElementById('c').innerHTML = data.map(m => `
-                <div class="p-2 bg-blue-900/20 rounded-xl"><span class="text-blue-400 font-bold">${m.sender}:</span> ${m.body}</div>
-            `).join('');
+        function add(e){ document.getElementById('m').value += e; }
+        async function load() {
+            const r = await fetch('/api/chat');
+            const d = await r.json();
+            document.getElementById('box').innerHTML = d.map(m => `
+                <div class="p-3 rounded-xl ${m.admin ? 'admin-msg' : 'bg-blue-900/20'}">
+                    <b class="${m.admin ? 'text-yellow-400' : 'text-blue-400'}">${m.user} ${m.admin ? '👑' : ''}</b>
+                    <p class="mt-1">${m.text}</p>
+                </div>`).join('');
         }
         async function send() {
             const i = document.getElementById('m');
-            if(!i.value) return;
-            await fetch('/api/messages', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({text: i.value})
-            });
-            i.value = ''; update();
+            await fetch('/api/chat', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({msg: i.value})});
+            i.value = ''; load();
         }
-        setInterval(update, 2000);
+        setInterval(load, 2000);
     </script>
 </body>
 </html>
