@@ -2,44 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Security Gateway</title>
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #00050a; color: #fff; font-family: sans-serif; }
-        .brand-glow {
-            font-size: 3rem; font-weight: 900;
-            filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%);
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
-        }
-        .glass-ui {
-            background: rgba(0, 10, 25, 0.9);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            backdrop-filter: blur(25px);
-        }
-        .input-field {
-            background: #eef2ff !important; color: #000 !important;
-            font-weight: bold; text-align: center; font-size: 1.2rem;
-        }
+        body { background: #000814; color: #fff; }
+        .glass { background: rgba(0, 10, 25, 0.95); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(30px); }
+        .brand { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-size: 2.8rem; font-weight: 900; }
+        .inp { background: #eef2ff; color: #000; font-weight: bold; text-align: center; font-size: 1.2rem; }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-    <div class="max-w-md w-full glass-ui p-12 rounded-[3.5rem] text-center shadow-2xl">
-        <img src="https://flagcdn.com/w40/dz.png" class="inline-block mb-4 shadow-md">
-        <p class="text-[10px] text-blue-400 tracking-widest uppercase mb-2">New Identity Registration</p>
-        <h1 class="brand-glow mb-8">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-        
+    <div class="max-w-md w-full glass p-12 rounded-[3.5rem] text-center shadow-2xl">
+        <h1 class="brand mb-8">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
         <div class="space-y-4">
-            <input id="phoneNum" type="text" placeholder="Phone Number (e.g. 055...)" class="w-full p-5 rounded-2xl input-field outline-none">
-            <input id="pass" type="password" placeholder="••••••••" class="w-full p-5 rounded-2xl input-field outline-none">
-            <button onclick="startAuth()" class="w-full bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black text-xl shadow-lg shadow-blue-600/30 transition-all active:scale-95">Secure Access</button>
+            <input id="p" type="text" placeholder="Phone Number" class="w-full p-5 rounded-2xl inp outline-none">
+            <input id="pw" type="password" placeholder="Password" class="w-full p-5 rounded-2xl inp outline-none">
+            <button onclick="auth()" class="w-full bg-blue-600 py-5 rounded-2xl font-black text-xl shadow-lg">Secure Access</button>
         </div>
-        <div class="mt-10 text-[9px] text-slate-600 tracking-tighter uppercase font-bold">SECURE SERVER FRANKFURT ● MisterAI PRO</div>
+        <p class="mt-8 text-[9px] text-slate-600 uppercase tracking-tighter">SECURE SERVER FRANKFURT ● MisterAI PRO</p>
     </div>
     <script>
-        async function startAuth() {
-            const phone = document.getElementById('phoneNum').value;
-            if(!phone) return alert("Enter Phone Number");
+        async function auth() {
+            const phone = document.getElementById('p').value;
             const res = await fetch('/api/auth', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -47,6 +31,7 @@
             });
             const data = await res.json();
             if(data.status === 'success') window.location.href = data.url;
+            else alert("Please enter a valid phone number.");
         }
     </script>
 </body>
