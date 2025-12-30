@@ -2,56 +2,114 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background: #00050a; color: white; font-family: sans-serif; }
         .brand { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-weight: 900; }
         .admin-box { background: rgba(255, 215, 0, 0.05); border-left: 4px solid gold; }
+        /* لتجاوب الشاشات الصغيرة */
+        @media (max-width: 1024px) {
+            .lg\:col-span-2 { grid-column: span 1 / span 1; }
+            .grid-cols-1.lg\:grid-cols-3 { grid-template-columns: 1fr; }
+            .h-[550px] { height: 70vh; } /* لتأخذ مساحة أكبر من الشاشة */
+        }
     </style>
 </head>
 <body class="p-4 md:p-8">
     <div class="max-w-6xl mx-auto">
-        <header class="flex justify-between items-center mb-10">
-            <h1 class="brand text-3xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+        <header class="flex justify-between items-center mb-6 md:mb-10">
+            <h1 class="brand text-2xl md:text-3xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
             <span class="text-xs text-blue-500 font-bold uppercase tracking-widest">Algerian Hub Live</span>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
             <div class="lg:col-span-2 space-y-6">
-                <div class="bg-blue-900/10 p-10 rounded-[2.5rem] border border-blue-500/10">
-                    <h2 class="text-2xl font-bold mb-4 text-white">Welcome, Algerian Pioneers 🇩🇿</h2>
-                    <p class="text-slate-400 leading-relaxed">This is your sovereign space for high-level tech discussion. All communications are secured under MisterAI's core protocols.</p>
+                <div class="bg-blue-900/10 p-6 md:p-10 rounded-[2.5rem] border border-blue-500/10">
+                    <h2 class="text-xl md:text-2xl font-bold mb-3 text-white">Welcome, Algerian Pioneers 🇩🇿</h2>
+                    <p class="text-slate-400 leading-relaxed text-sm">This is your sovereign space for high-level tech discussion. All communications are secured under MisterAI's core protocols.</p>
                 </div>
             </div>
 
-            <div class="bg-black/40 p-6 rounded-[2.5rem] border border-blue-500/10 h-[550px] flex flex-col shadow-2xl">
-                <div id="box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2 text-xs"></div>
+            <div class="bg-black/40 p-5 md:p-6 rounded-[2.5rem] border border-blue-500/10 h-[550px] flex flex-col shadow-2xl">
+                <div id="box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2 text-xs md:text-sm"></div>
                 
-                <div class="flex gap-2 mb-3 bg-blue-950/30 p-2 rounded-xl">
-                    <button onclick="add('🇩🇿')" class="hover:scale-125 transition">🇩🇿</button>
-                    <button onclick="add('🔥')" class="hover:scale-125 transition">🔥</button>
-                    <button onclick="add('🚀')" class="hover:scale-125 transition">🚀</button>
-                    <button onclick="add('👑')" class="hover:scale-125 transition">👑</button>
+                <div class="flex flex-wrap gap-2 mb-3 bg-blue-950/30 p-2 rounded-xl justify-center">
+                    <button onclick="add('🇩🇿')" class="p-1 hover:scale-125 transition">🇩🇿</button>
+                    <button onclick="add('🔥')" class="p-1 hover:scale-125 transition">🔥</button>
+                    <button onclick="add('🚀')" class="p-1 hover:scale-125 transition">🚀</button>
+                    <button onclick="add('👑')" class="p-1 hover:scale-125 transition">👑</button>
+                    <button id="recordBtn" class="bg-red-600 p-2 rounded-full text-white w-8 h-8 flex items-center justify-center text-sm ml-2">🎤</button>
+                    <span id="recordingStatus" class="text-red-400 text-xs self-center hidden">Recording...</span>
                 </div>
 
                 <div class="flex gap-2">
-                    <input id="m" type="text" placeholder="Share your thoughts..." class="w-full bg-blue-900/20 p-4 rounded-2xl outline-none border border-blue-500/10 text-xs">
-                    <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-bold">➤</button>
+                    <input id="m" type="text" placeholder="Share your thoughts..." class="w-full bg-blue-900/20 p-3 md:p-4 rounded-2xl outline-none border border-blue-500/10 text-xs md:text-sm">
+                    <button onclick="send()" class="bg-blue-600 px-4 md:px-6 rounded-2xl font-bold">➤</button>
                 </div>
             </div>
         </div>
     </div>
     <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        const recordBtn = document.getElementById('recordBtn');
+        const recordingStatus = document.getElementById('recordingStatus');
+
+        recordBtn.onclick = async () => {
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+                recordBtn.style.backgroundColor = 'red';
+                recordingStatus.style.display = 'none';
+            } else {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const formData = new FormData();
+                    formData.append('audio', audioBlob, 'audio.webm');
+
+                    await fetch('/api/chat', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    load(); // تحديث الدردشة لعرض الرسالة الصوتية
+                };
+                mediaRecorder.start();
+                recordBtn.style.backgroundColor = 'darkred';
+                recordingStatus.style.display = 'inline';
+            }
+        };
+
         function add(e){ document.getElementById('m').value += e; }
         async function load() {
             const r = await fetch('/api/chat');
             const d = await r.json();
-            document.getElementById('box').innerHTML = d.map(m => `
-                <div class="p-3 rounded-2xl ${m.admin ? 'admin-box' : 'bg-blue-900/20 shadow-inner'}">
-                    <b class="${m.admin ? 'text-yellow-400' : 'text-blue-400'} uppercase text-[9px] tracking-widest">${m.user} ${m.admin ? '👑' : ''}</b>
-                    <p class="mt-1 text-slate-200 text-sm">${m.text}</p>
-                </div>`).join('');
+            document.getElementById('box').innerHTML = d.map(m => {
+                const userClass = m.admin ? 'text-yellow-400' : 'text-blue-400';
+                const msgBoxClass = m.admin ? 'admin-box' : 'bg-blue-900/20 shadow-inner';
+                const userTag = `<b class="${userClass} uppercase text-[9px] md:text-[10px] tracking-widest">${m.user} ${m.admin ? '👑' : ''}</b>`;
+                
+                if (m.type === "audio") {
+                    return `
+                        <div class="p-3 rounded-2xl ${msgBoxClass}">
+                            ${userTag}
+                            <audio controls src="${m.audio_url}" class="w-full mt-2"></audio>
+                        </div>`;
+                } else {
+                    return `
+                        <div class="p-3 rounded-2xl ${msgBoxClass}">
+                            ${userTag}
+                            <p class="mt-1 text-slate-200 text-sm md:text-base">${m.text}</p>
+                        </div>`;
+                }
+            }).join('');
+            document.getElementById('box').scrollTop = document.getElementById('box').scrollHeight; // التمرير للأسفل
         }
         async function send() {
             const i = document.getElementById('m'); if(!i.value) return;
