@@ -1,28 +1,33 @@
 from flask import Flask, render_template, request, jsonify
-import os
 
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return render_template('index.html') # الصفحة الرئيسية الجديدة
+# تخزين المنشورات في الذاكرة (للتجربة الحقيقية)
+posts_db = [
+    {"user": "MisterAI", "content": "مرحباً بكم في فضاء السيادة الرقمية 🇩🇿. نحن نبني المستقبل معاً.", "likes": 12}
+]
 
-@app.route('/join')
-def join():
-    return render_template('register.html') # صفحة التسجيل
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/community')
 def community():
-    return render_template('community.html') # منصة المجتمع
+    return render_template('community.html')
 
-@app.route('/api/signup', methods=['POST'])
-def signup():
-    data = request.json
-    phone = data.get('phone')
-    if phone and phone.startswith(('05', '06', '07')) and len(phone) == 10:
-        return jsonify({"status": "success"})
-    return jsonify({"status": "error", "message": "الرقم غير صحيح"}), 400
+@app.route('/api/posts', methods=['GET', 'POST'])
+def handle_posts():
+    if request.method == 'POST':
+        data = request.json
+        if data.get('content'):
+            new_post = {
+                "user": "عضو مؤسس",
+                "content": data.get('content'),
+                "likes": 0
+            }
+            posts_db.insert(0, new_post)
+            return jsonify({"status": "success"})
+    return jsonify(posts_db)
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
