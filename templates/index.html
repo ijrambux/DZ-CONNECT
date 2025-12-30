@@ -3,89 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | السيادة الرقمية</title>
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | البداية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+        body { background: #00050a; color: #fff; font-family: 'Tajawal', sans-serif; }
         
-        body { 
-            background-color: #00050a; /* أسود عميق جداً */
-            background-image: radial-gradient(circle at top right, #001a33 0%, #000000 70%);
-            color: #fff; 
-            font-family: 'Tajawal', sans-serif;
-            min-height: 100vh;
-        }
-
-        /* اسم المنصة بالستايل المطلوب مع لمعان أزرق عصري */
-        .brand-title {
+        .brand-glow {
             font-size: clamp(2.5rem, 8vw, 5rem);
-            color: #00d4ff; /* أزرق لامع */
-            text-shadow: 0 0 15px rgba(0, 212, 255, 0.8), 0 0 30px rgba(0, 119, 255, 0.4);
-            letter-spacing: 2px;
-            font-weight: 900;
+            /* فلتر تحويل الدوائر السوداء إلى أزرق عصري مع بقاء الحروف بيضاء */
+            filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%);
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            display: inline-block;
         }
-
-        .glass-panel {
-            background: rgba(0, 10, 20, 0.7);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-        }
-
-        .glow-button {
-            background: linear-gradient(90deg, #0066ff, #00d4ff);
-            box-shadow: 0 0 20px rgba(0, 119, 255, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .glow-button:hover {
-            box-shadow: 0 0 40px rgba(0, 212, 255, 0.8);
-            transform: translateY(-2px);
-        }
-
-        .cyber-border {
-            border-right: 4px solid #00d4ff;
-        }
+        .glass { background: rgba(0, 20, 40, 0.6); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(15px); }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center p-6">
-
-    <div class="max-w-4xl w-full glass-panel p-8 md:p-16 rounded-[3rem] text-center">
+<body class="flex flex-col items-center justify-center min-h-screen p-6">
+    <div class="max-w-4xl w-full glass p-10 md:p-16 rounded-[3rem] text-center">
+        <h1 class="brand-glow mb-6">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
         
-        <div class="mb-10">
-            <img src="https://flagcdn.com/w80/dz.png" class="inline-block rounded shadow-2xl mb-6 opacity-80" width="50">
-            <h1 class="brand-title mb-2">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-            <p class="text-blue-400/60 tracking-[0.3em] text-xs font-bold uppercase">The Algerian Future is Here</p>
+        <div class="text-right space-y-6 mb-10 border-r-4 border-blue-500 pr-6">
+            <p class="text-xl md:text-2xl font-light text-blue-100 italic">"هذا مجرد مثال.. والباقي عليكم"</p>
+            <p class="text-slate-300">نحن بانتظار الشركات الكبرى لتفعيل هذه الرؤية في واقع رقمي سيادي.</p>
         </div>
 
-        <div class="text-right space-y-8 cyber-border pr-6 mb-12">
-            <p class="text-xl md:text-2xl text-blue-100 font-light leading-relaxed">
-                "أنا لست مبرمجاً، أنا شاب جزائري بسيط.. وضعت هذا **المثال الحقيقي** ليكون بذرة لمنصة سيادية وطنية."
-            </p>
-            
-            <p class="text-lg text-slate-300">
-                نتطلع لتعاون شركات الاتصالات الكبرى ودمج <strong>الذكاء الاصطناعي</strong> لبناء فضاء اجتماعي وسياسي محمي بالكامل.
-            </p>
-
-            <h2 class="text-2xl md:text-4xl font-black italic text-white">
-                "هذا مجرد <span class="text-blue-500 underline decoration-blue-500/30">مثال</span>.. والباقي <span class="text-red-500">عليكم</span>"
-            </h2>
-        </div>
-
-        <div class="flex flex-col md:flex-row gap-4 justify-center">
-            <a href="/join" class="glow-button px-12 py-4 rounded-xl font-black text-lg text-white">
-                دخول المنصة التجريبية 🚀
-            </a>
-            <button class="bg-transparent border border-blue-500/30 text-blue-400 px-8 py-4 rounded-xl font-bold hover:bg-blue-500/10 transition">
-                ميثاق الخصوصية
-            </button>
-        </div>
-
-        <div class="mt-16 pt-8 border-t border-blue-900/20 flex justify-between items-center text-[10px] text-slate-500 uppercase tracking-widest">
-            <span>By MisterAI</span>
-            <span>Secure 256-bit Encryption</span>
-        </div>
+        <a href="/community" class="inline-block bg-blue-600 hover:bg-blue-500 text-white px-12 py-4 rounded-2xl font-black text-xl transition-all shadow-lg shadow-blue-500/30">
+            دخول ساحة المجتمع 🚀
+        </a>
     </div>
-
 </body>
 </html>
