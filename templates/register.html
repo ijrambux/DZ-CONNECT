@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DZ-CONNECT | المنصة الجزائرية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            background: #000b18; 
+            color: #ffffff; 
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: screen;
+            margin: 0;
+        }
+
+        /* شعار DZ-CONNECT بألوان متطورة */
+        .logo-text {
+            font-size: 3rem;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: -2px;
+            background: linear-gradient(90deg, #10b981 0%, #ffffff 50%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(0, 150, 255, 0.5));
+        }
+
+        .fire-blue-border {
+            border: 2px solid #0066ff;
+            box-shadow: 0 0 20px #0066ff, inset 0 0 10px rgba(0, 102, 255, 0.3);
+        }
+
+        .input-dz {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1e293b;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .input-dz:focus {
+            border-color: #0066ff;
+            box-shadow: 0 0 10px rgba(0, 102, 255, 0.5);
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="w-full max-w-md p-10 rounded-[3rem] bg-black/40 backdrop-blur-md fire-blue-border text-center">
+        
+        <div class="mb-4">
+            <img src="https://flagcdn.com/w80/dz.png" class="inline-block rounded-md shadow-lg hover:scale-110 transition cursor-pointer" width="45">
+            <p class="text-[10px] text-blue-400 mt-2 font-bold uppercase tracking-widest">Welcome to DZ-CONNECT</p>
+        </div>
+
+        <h1 class="logo-text mb-8">DZ-CONNECT</h1>
+
+        <form onsubmit="handleSignup(event)" class="space-y-5">
+            <div>
+                <input type="tel" id="phone" placeholder="رقم الهاتف الجزائري" 
+                    class="w-full p-4 rounded-2xl input-dz text-center font-bold">
+            </div>
+            <div>
+                <input type="password" id="pass" placeholder="كلمة السر" 
+                    class="w-full p-4 rounded-2xl input-dz text-center">
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black text-white shadow-lg transition-all active:scale-95">
+                دخول آمن
+            </button>
+        </form>
+
+        <div class="mt-8 flex justify-center items-center gap-2 text-[10px] text-slate-500">
+            <span>🔒 سيرفر فرانكفورت مشفر</span>
+            <span class="w-1 h-1 bg-slate-700 rounded-full"></span>
+            <span>MisterAI PRO</span>
+        </div>
+    </div>
+
+    <script>
+        async function handleSignup(e) {
+            e.preventDefault();
+            const phone = document.getElementById('phone').value;
+            
+            if(!/^(05|06|07)[0-9]{8}$/.test(phone)) {
+                alert("❌ يرجى إدخال رقم جزائري (05/06/07) متكون من 10 أرقام.");
+                return;
+            }
+
+            alert("✅ أهلاً بك في DZ-CONNECT! جاري الربط...");
+        }
+    </script>
+</body>
+</html>
