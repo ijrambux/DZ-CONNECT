@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Sovereign Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #00050a; color: #fff; font-family: 'Inter', sans-serif; }
+        .glass-panel { background: rgba(0, 20, 40, 0.6); border: 1px solid rgba(0, 212, 255, 0.1); }
+        .brand-mini { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-weight: 900; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <nav class="max-w-6xl mx-auto flex justify-between items-center mb-8">
+        <h1 class="text-2xl brand-mini">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+        <a href="/" class="text-xs text-red-400 border border-red-900/30 px-4 py-2 rounded-full">Disconnect</a>
+    </nav>
+
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 h-[75vh]">
+        <div class="lg:col-span-1 glass-panel rounded-[2rem] p-6 flex flex-col">
+            <h2 class="text-blue-400 font-bold mb-4 flex items-center gap-2">● Global Live Chat</h2>
+            <div id="chatDisplay" class="flex-grow overflow-y-auto space-y-3 mb-4 text-xs"></div>
+            <div class="flex gap-2">
+                <input id="msgInput" type="text" placeholder="Share your thoughts..." class="w-full bg-black/40 border border-blue-900/30 p-3 rounded-xl text-xs outline-none focus:border-blue-400">
+                <button onclick="postMsg()" class="bg-blue-600 px-5 rounded-xl">➤</button>
+            </div>
+        </div>
+
+        <div class="lg:col-span-2 glass-panel rounded-[2rem] p-8 overflow-y-auto">
+            <h2 class="text-2xl font-bold mb-6 italic underline decoration-blue-500">Algerian Tech Forum</h2>
+            <div class="space-y-6">
+                <div class="bg-blue-900/10 p-6 rounded-3xl border-l-4 border-blue-500">
+                    <span class="text-[10px] text-blue-500 font-bold">SYSTEM ANNOUNCEMENT</span>
+                    <h3 class="text-xl font-bold mt-1">Welcome to the first Sovereign Algerian Forum.</h3>
+                    <p class="text-sm text-slate-400 mt-2">All messages are secured and messages from "Not Found" servers have been purged. Feel free to discuss the future of DZ tech in English.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function updateChat() {
+            const res = await fetch('/api/messages');
+            const data = await res.json();
+            document.getElementById('chatDisplay').innerHTML = data.map(m => `
+                <div class="bg-blue-500/5 p-3 rounded-2xl border-b border-blue-900/10">
+                    <span class="text-blue-400 font-bold block mb-1">${m.sender}</span>
+                    <span class="text-slate-200">${m.body}</span>
+                </div>
+            `).join('');
+        }
+
+        async function postMsg() {
+            const input = document.getElementById('msgInput');
+            if(!input.value) return;
+            await fetch('/api/messages', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text: input.value})
+            });
+            input.value = '';
+            updateChat();
+        }
+        setInterval(updateChat, 2000);
+    </script>
+</body>
+</html>
