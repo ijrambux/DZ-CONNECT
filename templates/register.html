@@ -3,95 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DZ-CONNECT | المنصة الجزائرية</title>
+    <title>DZ-CONNECT | تسجيل</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { 
-            background: #000b18; 
-            color: #ffffff; 
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: screen;
-            margin: 0;
-        }
-
-        /* شعار DZ-CONNECT بألوان متطورة */
-        .logo-text {
-            font-size: 3rem;
-            font-weight: 900;
-            font-style: italic;
-            letter-spacing: -2px;
+        body { background: #000814; color: #fff; font-family: system-ui, -apple-system, sans-serif; }
+        .logo-glow {
+            font-size: 3.5rem; font-weight: 900; font-style: italic;
             background: linear-gradient(90deg, #10b981 0%, #ffffff 50%, #ef4444 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(0, 150, 255, 0.5));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(0, 119, 255, 0.6));
         }
-
-        .fire-blue-border {
-            border: 2px solid #0066ff;
-            box-shadow: 0 0 20px #0066ff, inset 0 0 10px rgba(0, 102, 255, 0.3);
-        }
-
-        .input-dz {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid #1e293b;
-            color: white;
-            transition: 0.3s;
-        }
-
-        .input-dz:focus {
-            border-color: #0066ff;
-            box-shadow: 0 0 10px rgba(0, 102, 255, 0.5);
-            outline: none;
+        .fire-card {
+            border: 1px solid rgba(0, 119, 255, 0.3);
+            box-shadow: 0 0 30px rgba(0, 119, 255, 0.2);
+            background: rgba(0, 12, 28, 0.8);
+            backdrop-filter: blur(10px);
         }
     </style>
 </head>
-<body>
-
-    <div class="w-full max-w-md p-10 rounded-[3rem] bg-black/40 backdrop-blur-md fire-blue-border text-center">
-        
-        <div class="mb-4">
-            <img src="https://flagcdn.com/w80/dz.png" class="inline-block rounded-md shadow-lg hover:scale-110 transition cursor-pointer" width="45">
-            <p class="text-[10px] text-blue-400 mt-2 font-bold uppercase tracking-widest">Welcome to DZ-CONNECT</p>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="max-w-md w-full p-8 rounded-[3rem] fire-card text-center">
+        <div class="mb-6">
+            <img src="https://flagcdn.com/w80/dz.png" class="inline-block rounded-lg shadow-xl mb-2" width="50">
+            <p class="text-blue-400 text-[10px] font-bold tracking-[0.2em]">تسجيل حساب جديد</p>
         </div>
 
-        <h1 class="logo-text mb-8">DZ-CONNECT</h1>
+        <h1 class="logo-glow mb-10 tracking-tighter">DZ-CONNECT</h1>
 
-        <form onsubmit="handleSignup(event)" class="space-y-5">
-            <div>
-                <input type="tel" id="phone" placeholder="رقم الهاتف الجزائري" 
-                    class="w-full p-4 rounded-2xl input-dz text-center font-bold">
-            </div>
-            <div>
-                <input type="password" id="pass" placeholder="كلمة السر" 
-                    class="w-full p-4 rounded-2xl input-dz text-center">
-            </div>
+        <form onsubmit="sendData(event)" class="space-y-6">
+            <input type="tel" id="phone" placeholder="رقم الهاتف (05/06/07)" 
+                class="w-full bg-black/50 border border-blue-900/50 p-4 rounded-2xl text-center outline-none focus:border-blue-400 transition-all text-xl font-bold">
+            
+            <input type="password" id="password" placeholder="كلمة السر" 
+                class="w-full bg-black/50 border border-blue-900/50 p-4 rounded-2xl text-center outline-none focus:border-blue-400">
 
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black text-white shadow-lg transition-all active:scale-95">
+            <button type="submit" class="w-full bg-gradient-to-r from-blue-700 to-blue-500 py-4 rounded-2xl font-black text-lg shadow-lg hover:shadow-blue-500/40 transition-all active:scale-95">
                 دخول آمن
             </button>
         </form>
 
-        <div class="mt-8 flex justify-center items-center gap-2 text-[10px] text-slate-500">
-            <span>🔒 سيرفر فرانكفورت مشفر</span>
-            <span class="w-1 h-1 bg-slate-700 rounded-full"></span>
+        <div class="mt-10 text-[9px] text-slate-600 flex justify-center items-center gap-2">
             <span>MisterAI PRO</span>
+            <span class="w-1 h-1 bg-slate-800 rounded-full"></span>
+            <span>SECURE SERVER FRANKFURT</span>
         </div>
     </div>
 
     <script>
-        async function handleSignup(e) {
+        async function sendData(e) {
             e.preventDefault();
             const phone = document.getElementById('phone').value;
-            
-            if(!/^(05|06|07)[0-9]{8}$/.test(phone)) {
-                alert("❌ يرجى إدخال رقم جزائري (05/06/07) متكون من 10 أرقام.");
-                return;
-            }
+            const password = document.getElementById('password').value; // جلب كلمة السر
 
-            alert("✅ أهلاً بك في DZ-CONNECT! جاري الربط...");
+            const response = await fetch('/api/signup', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({phone, password}) // إرسال كلمة السر أيضاً
+            });
+            
+            const result = await response.json();
+            
+            if(result.status === "success") {
+                window.location.href = "/community"; // التحويل لصفحة المجتمع
+            } else {
+                alert(result.message);
+            }
         }
     </script>
 </body>
