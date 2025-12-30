@@ -1,52 +1,46 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 
 app = Flask(__name__)
+app.secret_key = "dz_connect_secret_key" # مفتاح الأمان للجلسات
 
-# قاعدة بيانات مؤقتة لتخزين منشورات الساحة (تختفي عند إعادة تشغيل السيرفر)
-# أضفنا منشورك الأول كترحيب رسمي
-posts_db = [
-    {
-        "user": "MisterAI", 
-        "content": "مرحباً بكم في 🅓🅩-🅒🅞🅝🅝🅔🅒🅣.. هذه هي بذرة مشروعنا السيادي للجزائر 🇩🇿.", 
-        "likes": 10
-    }
-]
+# قواعد بيانات مؤقتة في الذاكرة
+users = {} # تخزين المستخدمين: {phone: password}
+chat_messages = [] # تخزين رسائل الدردشة الجماعية
 
-# 1. الصفحة الرئيسية (Landing Page)
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# 2. صفحة الانضمام / التسجيل (التي كانت تظهر Not Found)
 @app.route('/join')
 def join():
     return render_template('register.html')
 
-# 3. صفحة ساحة المجتمع (Feed)
-@app.route('/community')
-def community():
-    return render_template('community.html')
-
-# 4. محرك الـ API لإدارة المنشورات (الإرسال والاستقبال)
-@app.route('/api/posts', methods=['GET', 'POST'])
-def handle_posts():
-    if request.method == 'POST':
-        data = request.json
-        if data and data.get('content'):
-            new_post = {
-                "user": "عضو جديد", # يمكنك تطويرها لاحقاً لتأخذ اسم المستخدم الحقيقي
-                "content": data.get('content'),
-                "likes": 0
-            }
-            # إضافة المنشور الجديد في بداية القائمة ليظهر في الأعلى
-            posts_db.insert(0, new_post)
-            return jsonify({"status": "success", "message": "تم النشر بنجاح"}), 201
-        return jsonify({"status": "error", "message": "المحتوى فارغ"}), 400
+@app.route('/api/register', methods=['POST'])
+def register():
+    data = request.json
+    phone = data.get('phone')
+    password = data.get('password')
     
-    # عند طلب GET يتم إرسال كل المنشورات المخزنة
-    return jsonify(posts_db)
+    if phone and password:
+        users[phone] = password
+        session['user'] = phone
+        return jsonify({"status": "success", "redirect": "/forum"})
+    return jsonify({"status": "error", "message": "Invalid data"}), 400
 
-# تشغيل التطبيق
+@app.route('/forum')
+def forum():
+    if 'user' not in session:
+        return redirect(url_for('join'))
+    return render_template('forum.html')
+
+@app.route('/api/chat', methods=['GET', 'POST'])
+def chat():
+    if request.method == 'POST':
+        msg = request.json.get('message')
+        if msg and 'user' in session:
+            chat_messages.append({"user": session['user'], "text": msg})
+            return jsonify({"status": "success"})
+    return jsonify(chat_messages)
+
 if __name__ == '__main__':
-    # ملاحظة: عند الرفع على Render، السيرفر يستخدم Gunicorn تلقائياً
     app.run(debug=True)
