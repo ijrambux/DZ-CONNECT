@@ -2,38 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Access</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #000814; color: white; font-family: sans-serif; }
-        .brand { font-size: 2.8rem; font-weight: 900; filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); text-shadow: 0 0 20px #00d4ff; }
-        .input-box { background: #eef2ff; color: black; font-weight: bold; text-align: center; }
+        body { background: #00050a; color: white; font-family: sans-serif; }
+        .input-premium { background: rgba(255,255,255,0.05); border: 1px solid rgba(0,212,255,0.2); }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-    <div class="max-w-md w-full bg-blue-950/20 p-10 rounded-[3rem] border border-blue-500/20 text-center backdrop-blur-xl">
-        <h1 class="brand mb-8">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+    <div class="max-w-md w-full bg-blue-900/10 p-8 rounded-[2.5rem] border border-blue-500/20 text-center">
+        <h2 class="text-2xl font-black mb-6 text-blue-400">ACCESS PORTAL</h2>
         <div class="space-y-4">
-            <input id="nick" type="text" placeholder="NICKNAME" class="w-full p-5 rounded-2xl input-box outline-none">
+            <input id="nick" type="text" placeholder="NICKNAME" class="w-full p-4 rounded-2xl input-premium outline-none text-center font-bold">
             
             <div class="flex gap-2">
-                <div class="bg-blue-600/20 px-4 flex items-center rounded-2xl font-bold text-blue-400 border border-blue-500/30">+213</div>
-                <input id="phone" type="text" placeholder="5 / 6 / 7 XXXXXXXX" class="flex-grow p-5 rounded-2xl input-box outline-none">
+                <div class="bg-blue-600/20 px-4 flex items-center rounded-2xl font-bold text-blue-400">+213</div>
+                <input id="phone" type="text" placeholder="5 / 6 / 7 XXXXXXXX" class="flex-grow p-4 rounded-2xl input-premium outline-none text-center font-bold">
             </div>
 
-            <button onclick="go()" class="w-full bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black text-xl shadow-lg transition-all active:scale-95">REQUEST ACCESS</button>
+            <button onclick="auth()" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-bold text-lg transition-all active:scale-95">REQUEST ACCESS</button>
         </div>
-        <p class="mt-8 text-[9px] text-slate-600 uppercase tracking-widest font-bold">Secure Algerian Node ● MisterAI</p>
     </div>
+
     <script>
-        async function go() {
+        async function auth() {
+            const nick = document.getElementById('nick').value;
+            const phone = document.getElementById('phone').value;
             const res = await fetch('/api/auth', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({nickname: document.getElementById('nick').value, phone: document.getElementById('phone').value})
+                body: JSON.stringify({nickname: nick, phone: phone})
             });
             const data = await res.json();
-            if(res.ok) window.location.href = data.url; else alert(data.message);
+            if(res.ok) window.location.href = data.url; 
+            else alert(data.message);
         }
     </script>
 </body>
