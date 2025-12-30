@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify Identity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #00050a; color: white; font-family: sans-serif; }
+        .code-input { background: #eef2ff; color: #000; font-weight: 900; letter-spacing: 0.5em; text-align: center; font-size: 2rem; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="bg-blue-900/10 p-10 rounded-[3rem] border border-blue-500/20 w-full max-w-sm text-center">
+        <h2 class="text-xl font-bold mb-2">Verify Phone</h2>
+        <p class="text-xs text-slate-400 mb-8">Enter the 4-digit code sent to your phone</p>
+        
+        <input id="vCode" type="text" maxlength="4" placeholder="0000" class="w-full p-5 rounded-2xl code-input mb-6 outline-none">
+        
+        <button onclick="checkCode()" class="w-full bg-blue-600 py-4 rounded-2xl font-bold shadow-lg shadow-blue-600/20">Verify & Continue</button>
+        <p class="mt-4 text-[10px] text-blue-500 animate-pulse">Waiting for SMS...</p>
+    </div>
+
+    <script>
+        async function checkCode() {
+            const code = document.getElementById('vCode').value;
+            const res = await fetch('/api/verify_code', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({code: code})
+            });
+            const data = await res.json();
+            if(data.status === 'success') window.location.href = data.url;
+            else alert(data.message);
+        }
+    </script>
+</body>
+</html>
