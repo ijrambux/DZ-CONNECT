@@ -3,72 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مجتمع DZ-CONNECT | الذكاء الاصطناعي</title>
+    <title>DZ-CONNECT | ساحة المجتمع</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
         body { background: #000814; color: #fff; font-family: 'Tajawal', sans-serif; }
-        .glass-chat {
-            background: rgba(0, 20, 40, 0.8);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 0 30px rgba(0, 119, 255, 0.2);
-        }
-        .ai-glow { text-shadow: 0 0 10px #00d4ff; color: #00d4ff; }
-        .user-bubble { background: rgba(0, 119, 255, 0.2); border-radius: 15px 15px 0 15px; }
-        .ai-bubble { background: rgba(16, 185, 129, 0.1); border-radius: 15px 15px 15px 0; border: 1px solid #10b981; }
+        .glass-card { background: rgba(0, 20, 40, 0.6); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(10px); }
+        .post-glow { border-right: 4px solid #00d4ff; background: rgba(0, 212, 255, 0.05); }
+        .input-focus:focus { border-color: #00d4ff; box-shadow: 0 0 15px rgba(0, 212, 255, 0.4); outline: none; }
     </style>
 </head>
-<body class="flex flex-col items-center p-6 min-h-screen">
+<body class="p-4 md:p-10 flex flex-col items-center">
 
-    <nav class="w-full max-w-5xl flex justify-between items-center mb-10 border-b border-blue-900/40 pb-4">
-        <h1 class="text-2xl font-black ai-glow tracking-tighter">DZ-CONNECT COMMUNITY</h1>
-        <img src="https://flagcdn.com/w40/dz.png" class="rounded shadow-lg">
-    </nav>
-
-    <div class="max-w-2xl w-full glass-chat rounded-[2.5rem] overflow-hidden flex flex-col h-[600px]">
-        <div class="bg-blue-600/20 p-5 border-b border-blue-500/30 flex items-center gap-3">
-            <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-            <span class="font-bold text-blue-400">المساعد الذكي (نسخة تجريبية)</span>
+    <header class="w-full max-w-3xl flex justify-between items-center mb-10">
+        <h1 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">DZ-CONNECT</h1>
+        <div class="flex items-center gap-2">
+            <span class="text-green-400 text-xs animate-pulse">● المجتمع متصل</span>
+            <img src="https://flagcdn.com/w40/dz.png" class="rounded shadow-lg">
         </div>
+    </header>
 
-        <div id="chat-box" class="flex-grow p-6 overflow-y-auto space-y-4">
-            <div class="ai-bubble p-4 max-w-[80%] text-sm leading-relaxed">
-                مرحباً بك في مجتمع <strong>DZ-CONNECT</strong>! أنا ذكاء المنصة الاصطناعي. لقد صممني مصطفى (MisterAI) لأبرهن أننا قادرون على بناء تكنولوجيا سيادية. كيف يمكنني مساعدتك؟
+    <main class="w-full max-w-2xl space-y-8">
+        
+        <div class="glass-card p-6 rounded-[2rem]">
+            <h2 class="text-blue-400 font-bold mb-4">ماذا تريد أن تقول للشعب الجزائري؟</h2>
+            <textarea id="postText" placeholder="اكتب فكرتك، رسالتك، أو دعمك هنا..." 
+                class="w-full bg-black/40 border border-blue-900/50 p-4 rounded-2xl h-32 input-focus transition-all text-sm resize-none"></textarea>
+            <div class="flex justify-between items-center mt-4">
+                <span class="text-[10px] text-slate-500 italic">سيتم النشر كـ "عضو مؤسس"</span>
+                <button onclick="addPost()" class="bg-blue-600 hover:bg-blue-500 px-8 py-3 rounded-xl font-bold transition-all active:scale-95">
+                    نشر في الساحة 🚀
+                </button>
             </div>
         </div>
 
-        <div class="p-4 bg-black/40 border-t border-blue-900/30 flex gap-2">
-            <input type="text" id="user-input" placeholder="اكتب رسالتك للمجتمع أو اسأل الذكاء..." 
-                class="bg-transparent border border-blue-900/50 w-full p-4 rounded-2xl outline-none focus:border-blue-400 transition text-sm">
-            <button onclick="sendMessage()" class="bg-blue-600 hover:bg-blue-500 px-6 rounded-2xl transition-all">
-                <span class="text-xl">➤</span>
-            </button>
+        <div id="feed" class="space-y-6">
+            <div class="glass-card p-6 rounded-[2rem] post-glow">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-blue-400 font-bold">MisterAI (مؤسس)</span>
+                    <span class="text-[10px] text-slate-600">منذ قليل</span>
+                </div>
+                <p class="text-slate-200 text-sm leading-relaxed">
+                    مرحباً بكم في أول فضاء جزائري سيادي. هذه الساحة مخصصة لكم، لتبادل الأفكار وبناء المستقبل. "هذا مجرد مثال.. والباقي عليكم".
+                </p>
+            </div>
         </div>
-    </div>
 
-    <p class="mt-8 text-slate-500 text-[10px] uppercase tracking-widest italic">
-        "هذا مجرد مثال.. والباقي عليكم" - MisterAI
-    </p>
+    </main>
 
     <script>
-        function sendMessage() {
-            const input = document.getElementById('user-input');
-            const chatBox = document.getElementById('chat-box');
+        function addPost() {
+            const text = document.getElementById('postText').value;
+            const feed = document.getElementById('feed');
             
-            if(input.value.trim() !== "") {
-                // رسالة المستخدم
-                chatBox.innerHTML += `<div class="flex justify-end"><div class="user-bubble p-4 max-w-[80%] text-sm text-right">${input.value}</div></div>`;
-                
-                // رد البوت (تجريبي)
-                setTimeout(() => {
-                    chatBox.innerHTML += `<div class="ai-bubble p-4 max-w-[80%] text-sm">رسالتك قيد المعالجة في سيرفراتنا المؤمنة. شكراً لمساهمتك في بناء أول منصة جزائرية سيادية! 🇩🇿</div>`;
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                }, 1000);
-
-                input.value = "";
-                chatBox.scrollTop = chatBox.scrollHeight;
+            if(text.trim() === "") {
+                alert("الرجاء كتابة شيء قبل النشر!");
+                return;
             }
+
+            // إنشاء المنشور الجديد
+            const postHTML = `
+                <div class="glass-card p-6 rounded-[2rem] post-glow animate-fade-in">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-green-400 font-bold italic">عضو جديد</span>
+                        <span class="text-[10px] text-slate-600">الآن</span>
+                    </div>
+                    <p class="text-slate-200 text-sm leading-relaxed">${text}</p>
+                </div>
+            `;
+
+            // إضافة المنشور في أعلى الساحة
+            feed.insertAdjacentHTML('afterbegin', postHTML);
+            
+            // مسح النص القديم
+            document.getElementById('postText').value = "";
+            
+            // تمرير للأعلى لرؤية المنشور
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
+
+    <footer class="mt-20 text-slate-700 text-[10px] tracking-[0.3em]">
+        DZ-CONNECT | SOVEREIGN COMMUNITY EXAMPLE
+    </footer>
+
 </body>
 </html>
