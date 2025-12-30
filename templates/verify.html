@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Verify Code</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>body { background: #00050a; color: white; }</style>
-</head>
-<body class="flex items-center justify-center min-h-screen">
-    <div class="text-center p-10 bg-blue-900/10 rounded-[3rem] border border-blue-500/20">
-        <h2 class="text-xl mb-6">Enter 4-Digit Code</h2>
-        <input id="c" type="text" maxlength="4" class="bg-white text-black text-center text-3xl font-bold p-4 rounded-2xl w-48 mb-6 outline-none">
-        <button onclick="v()" class="block w-full bg-blue-600 py-4 rounded-2xl font-bold">VERIFY</button>
+<head><meta charset="UTF-8"><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-[#00050a] text-white flex items-center justify-center min-h-screen">
+    <div class="text-center p-12 bg-blue-900/10 rounded-[3.5rem] border border-blue-500/20">
+        <h2 class="text-xl font-bold mb-6 text-blue-400">ENTER CODE</h2>
+        <input id="c" type="text" maxlength="4" placeholder="0000" class="bg-white text-black text-center text-4xl font-black p-5 rounded-3xl w-56 mb-8 outline-none tracking-widest">
+        <button onclick="v()" class="w-full bg-blue-600 py-5 rounded-3xl font-bold text-xl hover:bg-blue-500">VERIFY</button>
     </div>
     <script>
         async function v() {
