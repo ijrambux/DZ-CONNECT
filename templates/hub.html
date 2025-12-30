@@ -6,80 +6,73 @@
     <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #00050a; color: white; font-family: sans-serif; overflow-x: hidden; }
+        body { background: #00050a; color: white; font-family: sans-serif; }
         .brand { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-weight: 900; }
         .admin-box { background: rgba(255, 215, 0, 0.05); border-left: 4px solid gold; }
-        #box::-webkit-scrollbar { width: 4px; }
-        #box::-webkit-scrollbar-thumb { background: #0066ff; border-radius: 10px; }
     </style>
 </head>
-<body class="p-3 md:p-8">
-    <div class="max-w-6xl mx-auto">
+<body class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
         <header class="flex justify-between items-center mb-6">
-            <h1 class="brand text-xl md:text-3xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-            <span class="text-[10px] text-blue-500 font-bold uppercase tracking-widest">Live Hub</span>
+            <h1 class="brand text-2xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+            <span class="text-[10px] text-blue-500 font-bold uppercase">Sovereign Hub</span>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 hidden md:block">
-                <div class="bg-blue-900/10 p-10 rounded-[2.5rem] border border-blue-500/10">
-                    <h2 class="text-2xl font-bold mb-4">Welcome, MisterAI 🇩🇿</h2>
-                    <p class="text-slate-400">Secure Algerian communications active.</p>
-                </div>
+        <div class="bg-black/40 p-4 md:p-6 rounded-[2.5rem] border border-blue-500/10 h-[75vh] flex flex-col shadow-2xl">
+            <div id="box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2"></div>
+            
+            <div class="flex gap-2 mb-3 bg-blue-950/30 p-2 rounded-xl justify-center items-center">
+                <button id="micBtn" class="bg-red-600 w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all">🎤</button>
+                <span id="st" class="text-[10px] text-red-400 hidden animate-pulse">Recording...</span>
             </div>
 
-            <div class="bg-black/40 p-4 md:p-6 rounded-[2rem] md:rounded-[2.5rem] border border-blue-500/10 h-[80vh] md:h-[550px] flex flex-col shadow-2xl">
-                <div id="box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-1 text-sm"></div>
-                
-                <div class="flex gap-2 mb-3 bg-blue-950/30 p-2 rounded-xl justify-center items-center">
-                    <button onclick="add('🇩🇿')" class="text-lg">🇩🇿</button>
-                    <button onclick="add('🚀')" class="text-lg">🚀</button>
-                    <button id="mic" class="bg-red-600 w-10 h-10 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition">🎤</button>
-                </div>
-
-                <div class="flex gap-2">
-                    <input id="m" type="text" placeholder="Type here..." class="w-full bg-blue-900/20 p-4 rounded-2xl outline-none border border-blue-500/10">
-                    <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-bold">➤</button>
-                </div>
+            <div class="flex gap-2">
+                <input id="m" type="text" placeholder="Your message..." class="w-full bg-blue-900/20 p-4 rounded-2xl outline-none border border-blue-500/10 text-sm">
+                <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-bold">➤</button>
             </div>
         </div>
     </div>
+
     <script>
-        let mediaRecorder; let audioChunks = [];
-        const mic = document.getElementById('mic');
-        mic.onclick = async () => {
-            if (mediaRecorder && mediaRecorder.state === "recording") {
-                mediaRecorder.stop(); mic.classList.remove('animate-pulse', 'bg-red-800');
+        let rec; let chunks = [];
+        const btn = document.getElementById('micBtn');
+
+        btn.onclick = async () => {
+            if (rec && rec.state === "recording") {
+                rec.stop(); btn.style.background = "red";
+                document.getElementById('st').classList.add('hidden');
             } else {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
-                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-                mediaRecorder.onstop = async () => {
-                    const blob = new Blob(audioChunks, { type: 'audio/webm' });
-                    const form = new FormData(); form.append('audio', blob);
-                    await fetch('/api/chat', { method: 'POST', body: form }); load();
-                };
-                mediaRecorder.start(); mic.classList.add('animate-pulse', 'bg-red-800');
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    rec = new MediaRecorder(stream); chunks = [];
+                    rec.ondataavailable = e => chunks.push(e.data);
+                    rec.onstop = async () => {
+                        const blob = new Blob(chunks, { type: 'audio/webm' });
+                        const form = new FormData(); form.append('audio', blob);
+                        await fetch('/api/chat', { method: 'POST', body: form }); load();
+                    };
+                    rec.start(); btn.style.background = "darkred";
+                    document.getElementById('st').classList.remove('hidden');
+                } catch (err) { alert("Please allow microphone access and use HTTPS!"); }
             }
         };
 
-        function add(e){ document.getElementById('m').value += e; }
         async function load() {
             const r = await fetch('/api/chat'); const d = await r.json();
             document.getElementById('box').innerHTML = d.map(m => `
                 <div class="p-3 rounded-2xl ${m.admin ? 'admin-box' : 'bg-blue-900/20'}">
-                    <b class="${m.admin ? 'text-yellow-400' : 'text-blue-400'} text-[10px] uppercase">${m.user}</b>
-                    ${m.type === 'audio' ? `<audio controls src="${m.audio_url}" class="w-full mt-2 h-8"></audio>` : `<p class="mt-1 text-slate-200">${m.text}</p>`}
+                    <b class="${m.admin ? 'text-yellow-400' : 'text-blue-400'} text-[10px] uppercase tracking-tighter">${m.user}</b>
+                    ${m.type === 'audio' ? `<audio controls src="${m.audio_url}" class="w-full mt-2 h-10"></audio>` : `<p class="mt-1 text-slate-200 text-sm">${m.text}</p>`}
                 </div>`).join('');
             document.getElementById('box').scrollTop = document.getElementById('box').scrollHeight;
         }
+
         async function send() {
             const i = document.getElementById('m'); if(!i.value) return;
             await fetch('/api/chat', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({msg: i.value})});
             i.value = ''; load();
         }
-        setInterval(load, 2000); load();
+        setInterval(load, 3000); load();
     </script>
 </body>
 </html>
