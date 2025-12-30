@@ -9,102 +9,89 @@
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
         
         body { 
-            background: radial-gradient(circle at top, #001529 0%, #000000 100%);
+            background: radial-gradient(circle at top, #001a33 0%, #000000 100%);
             color: #fff; 
             font-family: 'Tajawal', sans-serif;
             min-height: 100vh;
-            margin: 0;
         }
 
-        .logo-glow {
-            font-size: clamp(3rem, 10vw, 5.5rem);
+        /* تأثير الأزرق اللامع المتطور لاسم المنصة */
+        .dz-connect-bright {
+            color: #00d4ff;
+            text-shadow: 0 0 10px #00d4ff, 0 0 20px #0077ff, 0 0 40px #0044ff;
             font-weight: 900;
-            font-style: italic;
+            letter-spacing: -2px;
+        }
+
+        .logo-gradient {
             background: linear-gradient(90deg, #10b981 0%, #ffffff 50%, #ef4444 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 20px rgba(0, 149, 255, 0.6));
-            line-height: 1;
         }
 
-        .message-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(0, 149, 255, 0.2);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        .glass-card {
+            background: rgba(0, 20, 40, 0.6);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 30px rgba(0, 119, 255, 0.1);
         }
 
-        .fire-btn {
-            background: linear-gradient(45deg, #0055ff, #00aaff);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .fire-btn:hover {
-            box-shadow: 0 0 30px rgba(0, 170, 255, 0.6);
-            transform: scale(1.05);
-        }
-
-        .dz-badge {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #10b981;
+        .company-tag {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #00d4ff;
         }
     </style>
 </head>
-<body class="flex flex-col items-center">
+<body class="flex flex-col items-center justify-center p-6">
 
-    <nav class="w-full max-w-7xl p-6 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <img src="https://flagcdn.com/w40/dz.png" class="rounded-sm shadow-md" alt="Algeria">
-            <span class="font-bold tracking-tighter text-blue-400">DZ-CONNECT PRO</span>
-        </div>
-        <a href="/join" class="text-sm border border-blue-500/50 px-4 py-2 rounded-full hover:bg-blue-500/10 transition">دخول المنصة</a>
-    </nav>
-
-    <main class="flex-grow flex flex-col items-center justify-center px-6 text-center mt-10 md:mt-20">
+    <div class="max-w-4xl w-full glass-card p-10 md:p-16 rounded-[4rem] text-center border-t-4 border-t-blue-500">
         
-        <h1 class="logo-glow mb-6">DZ-CONNECT</h1>
-        <p class="text-blue-200 text-lg md:text-xl mb-12 max-w-2xl font-light">
-            نحو فضاء رقمي جزائري سيادي.. محمي بذكاء اصطناعي وطني.
-        </p>
+        <div class="mb-8">
+            <img src="https://flagcdn.com/w80/dz.png" class="inline-block rounded-lg shadow-2xl mb-4" width="60">
+            <h1 class="text-6xl md:text-8xl dz-connect-bright mb-2">DZ-CONNECT</h1>
+            <p class="logo-gradient text-xl font-bold italic tracking-widest">ALGERIAN DIGITAL SOVEREIGNTY</p>
+        </div>
 
-        <div class="message-box max-w-3xl w-full p-8 md:p-12 rounded-[3rem] text-right relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
-            
-            <h2 class="text-2xl font-black text-blue-400 mb-6">نداء للسيادة والتحول الرقمي 🇩🇿</h2>
-            
-            <p class="text-slate-200 leading-relaxed text-lg mb-8">
-                "أنا لست مبرمجاً، ولا أسعى لمنصب.. أنا شاب جزائري بسيط، حلمه أن نملك مفاتيح بيتنا الرقمي بأيدينا. 
-                لماذا لا تكون لنا منصة خاصة بنا؟ تجمع عائلاتنا، تحمي بياناتنا، وتخدم انتخاباتنا وسياساتنا بخصوصية تامة."
+        <div class="text-right space-y-6 mt-12">
+            <p class="text-2xl text-blue-100 leading-relaxed font-light">
+                "أنا لست مبرمجاً، ولا أسعى لمنصب.. أنا شاب جزائري بسيط، حلمه أن نملك مفاتيح بيتنا الرقمي بأيدينا."
             </p>
-
-            <p class="text-slate-300 leading-relaxed text-lg mb-8">
-                ننتظر من الشركات الوطنية الكبرى والكفاءات التقنية تبني هذه النواة ودمج 
-                <strong>الذكاء الاصطناعي</strong> لخدمة المجتمع. الجزائر تستحق منصة بديلة وسرية تليق بعظمتها.
+            
+            <p class="text-lg text-slate-400">
+                نداء إلى قلاعنا الوطنية في قطاع الاتصالات:
             </p>
-
-            <div class="py-6 border-t border-blue-900/30">
-                <p class="text-2xl md:text-3xl font-black italic text-white">
-                    "هذا مجرد <span class="text-blue-500 underline decoration-blue-500/50">مثال</span>.. والباقي <span class="text-red-500">عليكم</span>"
-                </p>
+            
+            <div class="flex flex-wrap justify-end gap-3 mb-8">
+                <span class="company-tag">موبيليس | Mobilis</span>
+                <span class="company-tag">جازي | Djezzy</span>
+                <span class="company-tag">أوريدو | Ooredoo</span>
+                <span class="company-tag">اتصالات الجزائر</span>
             </div>
+
+            <p class="text-xl text-slate-200">
+                لماذا لا نملك منصة سيادية تخدم مجتمعنا، اقتصادنا، وسياساتنا بخصوصية تامة؟ 
+                نحن بحاجة لدمج <strong>الذكاء الاصطناعي</strong> في مشروع وطني بديل وسري.
+            </p>
         </div>
 
-        <div class="mt-12 mb-20">
-            <a href="/join" class="fire-btn px-16 py-5 rounded-2xl font-black text-xl text-white inline-block shadow-2xl">
-                تأمل التجربة الآن 🚀
+        <div class="mt-16 pt-8 border-t border-blue-900/50">
+            <h2 class="text-3xl md:text-5xl font-black italic text-white mb-6">
+                "هذا مجرد <span class="text-blue-500">مثال</span>.. والباقي <span class="text-red-500 underline">عليكم</span>"
+            </h2>
+            
+            <a href="/join" class="inline-block mt-8 bg-blue-600 hover:bg-blue-400 text-white px-12 py-5 rounded-2xl font-black text-xl transition-all shadow-xl shadow-blue-500/30 active:scale-95">
+                تصفح النموذج الأولي 🚀
             </a>
-            <p class="text-slate-600 text-[10px] mt-4 tracking-widest uppercase">MisterAI - Building the Future of DZ</p>
         </div>
 
-    </main>
-
-    <footer class="w-full p-10 flex flex-wrap justify-center gap-4 border-t border-white/5 bg-black/50">
-        <span class="dz-badge px-4 py-1 rounded-full text-[10px] font-bold">#السيادة_الرقمية</span>
-        <span class="dz-badge px-4 py-1 rounded-full text-[10px] font-bold">#ذكاء_اصطناعي_جزائري</span>
-        <span class="dz-badge px-4 py-1 rounded-full text-[10px] font-bold">#بناء_الوطن</span>
-        <span class="dz-badge px-4 py-1 rounded-full text-[10px] font-bold">#DZ_CONNECT</span>
-    </footer>
+        <p class="mt-12 text-[10px] text-slate-600 tracking-[0.5em] font-bold uppercase">
+            Designed by MisterAI for Algeria
+        </p>
+    </div>
 
 </body>
 </html>
