@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Global Forum</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #00050a; color: #fff; font-family: 'Inter', sans-serif; }
+        .brand-text { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); }
+        .glass { background: rgba(0, 20, 40, 0.6); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="p-6">
+    <nav class="max-w-5xl mx-auto flex justify-between items-center mb-10">
+        <h1 class="text-2xl font-black brand-text">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+        <div class="text-blue-400 text-sm">Welcome, Member</div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-1 glass p-4 rounded-3xl h-[500px] flex flex-col">
+            <h2 class="text-blue-400 font-bold mb-4 border-b border-blue-900/30 pb-2">Global Live Chat</h2>
+            <div id="chatBox" class="flex-grow overflow-y-auto text-xs space-y-3 mb-4 pr-2"></div>
+            <div class="flex gap-2">
+                <input id="chatInput" type="text" placeholder="Type..." class="bg-black/50 border border-blue-900/40 p-2 rounded-xl w-full text-xs outline-none">
+                <button onclick="sendMsg()" class="bg-blue-600 px-4 rounded-xl">➤</button>
+            </div>
+        </div>
+
+        <div class="md:col-span-2 glass p-6 rounded-3xl">
+            <h2 class="text-xl font-bold mb-6">Algerian Innovation Hub</h2>
+            <div class="space-y-4">
+                <div class="bg-blue-900/10 p-4 rounded-2xl border-l-4 border-blue-500">
+                    <h3 class="text-blue-400 font-bold">Project Goal</h3>
+                    <p class="text-sm text-slate-300 mt-1">Uniting all Algerians to build a sovereign digital future. Discussion is now open.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchChat() {
+            const res = await fetch('/api/chat');
+            const msgs = await res.json();
+            document.getElementById('chatBox').innerHTML = msgs.map(m => 
+                `<div class="p-2 bg-blue-900/20 rounded-lg"><strong>${m.user}:</strong> ${m.text}</div>`
+            ).join('');
+        }
+
+        async function sendMsg() {
+            const input = document.getElementById('chatInput');
+            if(!input.value) return;
+            await fetch('/api/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: input.value})
+            });
+            input.value = '';
+            fetchChat();
+        }
+        setInterval(fetchChat, 3000); // تحديث الدردشة كل 3 ثواني
+    </script>
+</body>
+</html>
