@@ -6,84 +6,73 @@
     <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Welcome</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap');
-        
         body { 
             background: #00050a; 
             color: #fff; 
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            font-family: sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: screen;
         }
 
-        /* ستايل الاسم بفلتر الأزرق العصري والحروف البيضاء */
-        .brand-neon {
-            font-size: clamp(2.5rem, 12vw, 5.5rem);
+        /* تنسيق الشعار بالأزرق والأبيض */
+        .brand-logo {
+            font-size: clamp(2rem, 10vw, 4.5rem);
             font-weight: 900;
             filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%);
-            text-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
-            display: inline-block;
-            letter-spacing: -2px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            letter-spacing: -1px;
         }
 
-        .hero-glass {
-            background: rgba(0, 20, 40, 0.4);
+        .glass-card {
+            background: rgba(0, 20, 40, 0.5);
             border: 1px solid rgba(0, 212, 255, 0.1);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(10px);
         }
 
-        .btn-main {
+        .btn-enter {
             background: #0066ff;
-            transition: all 0.3s ease;
             box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+            transition: 0.3s;
         }
 
-        .btn-main:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 0 40px rgba(0, 102, 255, 0.5);
-        }
-
-        .flag-float {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .btn-enter:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 102, 255, 0.5);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-6">
+<body class="min-h-screen">
 
-    <div class="max-w-4xl w-full text-center space-y-8">
+    <div class="text-center space-y-8 p-6">
         
-        <div class="flag-float mb-4">
-            <img src="https://flagcdn.com/w80/dz.png" class="inline-block rounded-lg shadow-2xl border border-white/10">
+        <div class="mb-4">
+            <img src="https://flagcdn.com/w80/dz.png" class="inline-block rounded shadow-lg">
         </div>
 
-        <h1 class="brand-neon">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+        <h1 class="brand-logo">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
         
-        <div class="hero-glass p-8 md:p-12 rounded-[3rem] space-y-6">
-            <p class="text-blue-400 font-bold tracking-[0.4em] uppercase text-xs md:text-sm">
-                Algerian Digital Sovereignty
+        <div class="glass-card p-10 md:p-14 rounded-[3rem] space-y-6 max-w-lg mx-auto">
+            <p class="text-blue-400 font-bold tracking-widest text-xs uppercase">
+                Algerian Hub
             </p>
             
-            <h2 class="text-xl md:text-3xl font-light text-slate-300 leading-relaxed">
-                Connect with the brightest minds of <span class="text-white font-bold underline decoration-blue-500">Algeria</span> in our secure, English-first forum.
+            <h2 class="text-2xl md:text-3xl font-bold text-white">
+                Welcome to DZ-CONNECT Forum
             </h2>
 
-            <div class="pt-6">
-                <a href="/join" class="btn-main inline-block px-14 py-5 rounded-2xl font-black text-xl md:text-2xl uppercase tracking-tighter">
-                    Enter the Hub 🚀
+            <div class="pt-4">
+                <a href="/join" class="btn-enter inline-block px-16 py-5 rounded-2xl font-black text-xl uppercase tracking-tighter">
+                    ENTER 🚀
                 </a>
             </div>
         </div>
 
-        <div class="pt-10 flex flex-col items-center opacity-40 hover:opacity-100 transition-opacity">
-            <div class="h-[1px] w-20 bg-blue-500 mb-4"></div>
-            <p class="text-[10px] uppercase tracking-[0.5em] font-bold">
-                Developed by MisterAI ● 2025
-            </p>
-        </div>
+        <p class="text-[10px] text-slate-600 font-bold tracking-[0.3em] uppercase">
+            Developed by MisterAI ● 2025
+        </p>
     </div>
 
 </body>
