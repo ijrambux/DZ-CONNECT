@@ -3,25 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Cinema Hub</title>
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | VIP Cinema</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
     <style>
         body { background: #00050a; color: white; font-family: sans-serif; }
         .brand { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-weight: 900; }
-        .video-box { border-radius: 2rem; overflow: hidden; border: 1px solid rgba(0, 102, 255, 0.3); background: #000; }
+        .video-box { border-radius: 1.5rem; overflow: hidden; border: 2px solid rgba(0, 102, 255, 0.3); background: #000; }
+        
+        /* تكبير الرسائل للهاتف */
+        #box { font-size: 16px !important; }
         #box::-webkit-scrollbar { width: 4px; }
         #box::-webkit-scrollbar-thumb { background: #0066ff; border-radius: 10px; }
-        .admin-box { background: rgba(255, 215, 0, 0.05); border-left: 4px solid gold; }
+        
+        /* تحسين الأزرار لتكون ضخمة وسهلة الضغط */
+        .channel-btn { 
+            background: rgba(30, 58, 138, 0.5); 
+            border: 1px solid rgba(59, 130, 246, 0.3); 
+            padding: 16px 10px; 
+            font-size: 13px !important; 
+            font-weight: bold;
+            border-radius: 1rem;
+            transition: 0.3s;
+        }
+        .channel-btn:active { transform: scale(0.95); background: #2563eb; }
+        
+        .admin-box { background: rgba(255, 215, 0, 0.1); border-left: 5px solid gold; }
+        .msg-bubble { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); }
     </style>
 </head>
-<body class="p-2 md:p-6">
-    <div class="max-w-7xl mx-auto">
-        <header class="flex justify-between items-center mb-4 px-4">
-            <h1 class="brand text-2xl md:text-3xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-            <div class="flex items-center gap-2">
-                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                <span class="text-[10px] text-green-500 font-bold uppercase tracking-widest">Cinema Active</span>
+<body class="p-3 md:p-6">
+    <div class="max-w-[1600px] mx-auto">
+        <header class="flex justify-between items-center mb-4 px-2">
+            <h1 class="brand text-2xl md:text-4xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+            <div class="flex items-center gap-2 bg-blue-600/20 px-3 py-1 rounded-full">
+                <span class="w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+                <span class="text-[10px] font-bold uppercase text-blue-400">Live Cinema</span>
             </div>
         </header>
 
@@ -29,41 +46,37 @@
             <div class="lg:col-span-3 space-y-4">
                 <div class="video-box shadow-2xl aspect-video">
                     <video id="live-player" class="video-js vjs-fluid vjs-default-skin" controls preload="auto" data-setup='{}'>
-                        <source id="video-source" src="https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8" type="application/x-mpegURL">
+                        <source src="https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8" type="application/x-mpegURL">
                     </video>
                 </div>
                 
-                <div class="bg-blue-900/10 p-4 rounded-2xl border border-blue-500/20 flex flex-wrap gap-4 items-center">
-                    <label class="font-bold text-blue-400 text-sm">SELECT CHANNEL:</label>
-                    <select id="channel-select" onchange="changeChannel(this.value)" class="bg-black text-white p-2 rounded-xl border border-blue-500/40 text-sm outline-none flex-grow">
-                        <option value="https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8">Rakuten Top Movies UK</option>
-                        <option value="https://54045f0c40fd442c8b06df076aaf1e85.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6065/master.m3u8">Rakuten Action UK</option>
-                        <option value="https://9be783d652cd4b099cf63e1dc134c4a3.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6181/master.m3u8">Rakuten Comedy UK</option>
-                        <option value="https://fee09fd665814f51b939b6d106cf5f66.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6093/master.m3u8">Rakuten Drama UK</option>
-                        <option value="https://a9c57ec7ec5e4b7daeacc6316a0bb404.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6069/master.m3u8">Rakuten Action Spain</option>
-                    </select>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-blue-900/10 p-4 rounded-[2rem]">
+                    <button onclick="change('https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8')" class="channel-btn">🎬 TOP MOVIES</button>
+                    <button onclick="change('https://54045f0c40fd442c8b06df076aaf1e85.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6065/master.m3u8')" class="channel-btn">💥 ACTION UK</button>
+                    <button onclick="change('https://9be783d652cd4b099cf63e1dc134c4a3.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6181/master.m3u8')" class="channel-btn">😂 COMEDY UK</button>
+                    <button onclick="change('https://fee09fd665814f51b939b6d106cf5f66.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6093/master.m3u8')" class="channel-btn">🎭 DRAMA UK</button>
                 </div>
             </div>
 
-            <div class="bg-black/40 p-4 rounded-[2.5rem] border border-blue-500/10 h-[600px] flex flex-col shadow-2xl backdrop-blur-md">
-                <div id="box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-1 text-xs"></div>
+            <div class="bg-black/50 p-5 rounded-[2.5rem] border border-blue-500/20 h-[650px] flex flex-col backdrop-blur-xl">
+                <div id="box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-1"></div>
                 
-                <div class="flex gap-2 mb-3 overflow-x-auto p-1 bg-white/5 rounded-xl">
-                    <button onclick="add('🇩🇿')" class="text-lg">🇩🇿</button>
-                    <button onclick="add('🍿')" class="text-lg">🍿</button>
-                    <button onclick="add('🎬')" class="text-lg">🎬</button>
-                    <button onclick="add('🔥')" class="text-lg">🔥</button>
-                    <button onclick="add('😂')" class="text-lg">😂</button>
+                <div class="flex gap-3 mb-4 overflow-x-auto p-2 bg-white/5 rounded-2xl">
+                    <button onclick="add('🇩🇿')" class="text-2xl">🇩🇿</button>
+                    <button onclick="add('❤️')" class="text-2xl">❤️</button>
+                    <button onclick="add('😂')" class="text-2xl">😂</button>
+                    <button onclick="add('🔥')" class="text-2xl">🔥</button>
+                    <button onclick="add('🍿')" class="text-2xl">🍿</button>
                 </div>
 
-                <div class="flex items-center gap-2 mb-3">
-                    <button id="mic" class="bg-red-600 w-10 h-10 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all">🎤</button>
-                    <span id="st" class="text-[9px] text-red-500 hidden animate-pulse font-bold">REC</span>
+                <div class="flex items-center gap-3 mb-4">
+                    <button id="mic" class="bg-red-600 w-14 h-14 rounded-full flex items-center justify-center shadow-lg active:scale-90">🎤</button>
+                    <span id="st" class="text-xs text-red-500 hidden animate-pulse font-black">RECORDING...</span>
                 </div>
 
                 <div class="flex gap-2">
-                    <input id="m" type="text" placeholder="Comment..." class="w-full bg-blue-900/20 p-3 rounded-xl outline-none border border-blue-500/10 text-xs">
-                    <button onclick="send()" class="bg-blue-600 px-4 rounded-xl font-bold">➤</button>
+                    <input id="m" type="text" placeholder="Type here..." class="w-full bg-blue-900/20 p-5 rounded-2xl outline-none border border-blue-500/20 text-lg">
+                    <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-bold text-xl">➤</button>
                 </div>
             </div>
         </div>
@@ -71,45 +84,40 @@
 
     <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
     <script>
-        const player = videojs('live-player');
-        
-        function changeChannel(url) {
-            player.src({ type: 'application/x-mpegURL', src: url });
-            player.play();
-        }
+        const p = videojs('live-player');
+        function change(u) { p.src({ type: 'application/x-mpegURL', src: u }); p.play(); }
 
-        // --- نظام الدردشة والصوت ---
         let rec; let chunks = [];
-        const micBtn = document.getElementById('mic');
+        const mic = document.getElementById('mic');
 
-        micBtn.onclick = async () => {
+        mic.onclick = async () => {
             if (rec && rec.state === "recording") {
-                rec.stop(); micBtn.style.background = "red";
+                rec.stop(); mic.style.background = "red";
                 document.getElementById('st').classList.add('hidden');
             } else {
                 try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    rec = new MediaRecorder(stream); chunks = [];
+                    const s = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    rec = new MediaRecorder(s); chunks = [];
                     rec.ondataavailable = e => chunks.push(e.data);
                     rec.onstop = async () => {
-                        const blob = new Blob(chunks, { type: 'audio/webm' });
-                        const form = new FormData(); form.append('audio', blob);
-                        await fetch('/api/chat', { method: 'POST', body: form }); load();
+                        const b = new Blob(chunks, { type: 'audio/webm' });
+                        const f = new FormData(); f.append('audio', b);
+                        await fetch('/api/chat', { method: 'POST', body: f }); load();
                     };
-                    rec.start(); micBtn.style.background = "darkred";
+                    rec.start(); mic.style.background = "darkred";
                     document.getElementById('st').classList.remove('hidden');
-                } catch (err) { alert("HTTPS Required for Voice!"); }
+                } catch (e) { alert("Mic needs HTTPS!"); }
             }
         };
 
-        function add(e){ document.getElementById('m').value += e; }
+        function add(e){ const i = document.getElementById('m'); i.value += e; i.focus(); }
 
         async function load() {
             const r = await fetch('/api/chat'); const d = await r.json();
             document.getElementById('box').innerHTML = d.map(m => `
-                <div class="p-2 rounded-xl ${m.admin ? 'admin-box' : 'bg-blue-900/10 shadow-sm'}">
-                    <b class="${m.admin ? 'text-yellow-400' : 'text-blue-400'} text-[8px] uppercase">${m.user}</b>
-                    ${m.type === 'audio' ? `<audio controls src="${m.audio_url}" class="w-full mt-1 h-8"></audio>` : `<p class="mt-1 text-slate-200 text-xs">${m.text}</p>`}
+                <div class="p-4 rounded-2xl ${m.admin ? 'admin-box' : 'msg-bubble'}">
+                    <div class="text-[11px] font-black text-blue-400 uppercase mb-1">${m.user}</div>
+                    ${m.type === 'audio' ? `<audio controls src="${m.audio_url}" class="w-full h-10"></audio>` : `<div class="text-[17px] text-white">${m.text}</div>`}
                 </div>`).join('');
             document.getElementById('box').scrollTop = document.getElementById('box').scrollHeight;
         }
