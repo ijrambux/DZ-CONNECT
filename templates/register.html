@@ -3,74 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | انضمام</title>
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | تسجيل</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
         body { background: #00050a; color: #fff; font-family: 'Tajawal', sans-serif; }
         
-        .brand-logo {
+        /* استايل الاسم: دوائر زرقاء عصرية وحروف بيضاء */
+        .brand-logo-glow {
+            font-size: 2.5rem;
+            font-weight: 900;
             filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%);
-            font-size: 2rem; font-weight: 900;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+            display: inline-block;
         }
 
-        .glass-box {
-            background: rgba(0, 20, 40, 0.6);
+        .glass-card {
+            background: rgba(0, 10, 25, 0.8);
             border: 1px solid rgba(0, 212, 255, 0.2);
             backdrop-filter: blur(20px);
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
         }
 
-        .input-glow:focus {
-            border-color: #00d4ff;
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
-            outline: none;
+        .input-style {
+            background: #eef2ff !important;
+            color: #000 !important;
+            font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-6">
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
 
-    <div class="max-w-md w-full glass-box p-8 md:p-12 rounded-[3rem] border-t-4 border-t-blue-500">
+    <div class="max-w-md w-full glass-card p-10 rounded-[3rem] text-center border-t-2 border-blue-500">
         
-        <div class="text-center mb-8">
-            <span class="brand-logo">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</span>
-            <p class="text-xs text-blue-400/50 mt-2 uppercase tracking-widest">Digital Citizenship</p>
+        <div class="mb-8">
+            <img src="https://flagcdn.com/w40/dz.png" class="inline-block mb-4 shadow-lg rounded-sm">
+            <p class="text-[10px] text-blue-400 tracking-widest mb-2">تسجيل حساب جديد</p>
+            <h1 class="brand-logo-glow">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
         </div>
 
-        <h2 class="text-xl font-bold text-center mb-8">إنشاء حساب سيادي جديد</h2>
+        <form action="/community" class="space-y-6">
+            <input type="text" placeholder="رقم الهاتف أو الاسم" 
+                class="w-full p-5 rounded-2xl input-style text-xl outline-none border-none">
+            
+            <input type="password" placeholder="••••••••" 
+                class="w-full p-5 rounded-2xl input-style text-xl outline-none border-none">
 
-        <form action="/api/register" method="POST" class="space-y-6">
-            <div>
-                <label class="block text-xs text-slate-500 mb-2 mr-2">الاسم المستعار (سيكون هويتك في الساحة)</label>
-                <input type="text" placeholder="مثال: MisterAI" 
-                    class="w-full bg-black/40 border border-blue-900/40 p-4 rounded-2xl text-sm input-glow transition-all">
-            </div>
-
-            <div>
-                <label class="block text-xs text-slate-500 mb-2 mr-2">البريد الإلكتروني (محمي بالتشفير)</label>
-                <input type="email" placeholder="email@dz.com" 
-                    class="w-full bg-black/40 border border-blue-900/40 p-4 rounded-2xl text-sm input-glow transition-all">
-            </div>
-
-            <div>
-                <label class="block text-xs text-slate-500 mb-2 mr-2">كلمة المرور</label>
-                <input type="password" placeholder="••••••••" 
-                    class="w-full bg-black/40 border border-blue-900/40 p-4 rounded-2xl text-sm input-glow transition-all">
-            </div>
-
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black text-white transition-all shadow-lg shadow-blue-500/20 active:scale-95">
-                تفعيل الهوية الرقمية 🚀
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl transition-all shadow-xl shadow-blue-600/20 active:scale-95">
+                دخول آمن
             </button>
         </form>
 
-        <div class="mt-8 text-center">
-            <a href="/" class="text-xs text-slate-500 hover:text-blue-400">العودة للرئيسية</a>
+        <div class="mt-8 text-[10px] text-slate-600 tracking-tighter">
+            SECURE SERVER FRANKFURT  ●  MisterAI PRO
         </div>
     </div>
-
-    <footer class="mt-10 text-[10px] text-slate-700 font-bold uppercase tracking-[0.4em]">
-        Design by MisterAI
-    </footer>
 
 </body>
 </html>
