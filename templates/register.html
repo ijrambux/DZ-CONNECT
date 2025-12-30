@@ -3,72 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DZ-CONNECT | تسجيل</title>
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | انضمام</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #000814; color: #fff; font-family: system-ui, -apple-system, sans-serif; }
-        .logo-glow {
-            font-size: 3.5rem; font-weight: 900; font-style: italic;
-            background: linear-gradient(90deg, #10b981 0%, #ffffff 50%, #ef4444 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px rgba(0, 119, 255, 0.6));
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+        body { background: #00050a; color: #fff; font-family: 'Tajawal', sans-serif; }
+        
+        .brand-logo {
+            filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%);
+            font-size: 2rem; font-weight: 900;
         }
-        .fire-card {
-            border: 1px solid rgba(0, 119, 255, 0.3);
-            box-shadow: 0 0 30px rgba(0, 119, 255, 0.2);
-            background: rgba(0, 12, 28, 0.8);
-            backdrop-filter: blur(10px);
+
+        .glass-box {
+            background: rgba(0, 20, 40, 0.6);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .input-glow:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+            outline: none;
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
-    <div class="max-w-md w-full p-8 rounded-[3rem] fire-card text-center">
-        <div class="mb-6">
-            <img src="https://flagcdn.com/w80/dz.png" class="inline-block rounded-lg shadow-xl mb-2" width="50">
-            <p class="text-blue-400 text-[10px] font-bold tracking-[0.2em]">تسجيل حساب جديد</p>
+<body class="flex flex-col items-center justify-center min-h-screen p-6">
+
+    <div class="max-w-md w-full glass-box p-8 md:p-12 rounded-[3rem] border-t-4 border-t-blue-500">
+        
+        <div class="text-center mb-8">
+            <span class="brand-logo">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</span>
+            <p class="text-xs text-blue-400/50 mt-2 uppercase tracking-widest">Digital Citizenship</p>
         </div>
 
-        <h1 class="logo-glow mb-10 tracking-tighter">DZ-CONNECT</h1>
+        <h2 class="text-xl font-bold text-center mb-8">إنشاء حساب سيادي جديد</h2>
 
-        <form onsubmit="sendData(event)" class="space-y-6">
-            <input type="tel" id="phone" placeholder="رقم الهاتف (05/06/07)" 
-                class="w-full bg-black/50 border border-blue-900/50 p-4 rounded-2xl text-center outline-none focus:border-blue-400 transition-all text-xl font-bold">
-            
-            <input type="password" id="password" placeholder="كلمة السر" 
-                class="w-full bg-black/50 border border-blue-900/50 p-4 rounded-2xl text-center outline-none focus:border-blue-400">
+        <form action="/api/register" method="POST" class="space-y-6">
+            <div>
+                <label class="block text-xs text-slate-500 mb-2 mr-2">الاسم المستعار (سيكون هويتك في الساحة)</label>
+                <input type="text" placeholder="مثال: MisterAI" 
+                    class="w-full bg-black/40 border border-blue-900/40 p-4 rounded-2xl text-sm input-glow transition-all">
+            </div>
 
-            <button type="submit" class="w-full bg-gradient-to-r from-blue-700 to-blue-500 py-4 rounded-2xl font-black text-lg shadow-lg hover:shadow-blue-500/40 transition-all active:scale-95">
-                دخول آمن
+            <div>
+                <label class="block text-xs text-slate-500 mb-2 mr-2">البريد الإلكتروني (محمي بالتشفير)</label>
+                <input type="email" placeholder="email@dz.com" 
+                    class="w-full bg-black/40 border border-blue-900/40 p-4 rounded-2xl text-sm input-glow transition-all">
+            </div>
+
+            <div>
+                <label class="block text-xs text-slate-500 mb-2 mr-2">كلمة المرور</label>
+                <input type="password" placeholder="••••••••" 
+                    class="w-full bg-black/40 border border-blue-900/40 p-4 rounded-2xl text-sm input-glow transition-all">
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black text-white transition-all shadow-lg shadow-blue-500/20 active:scale-95">
+                تفعيل الهوية الرقمية 🚀
             </button>
         </form>
 
-        <div class="mt-10 text-[9px] text-slate-600 flex justify-center items-center gap-2">
-            <span>MisterAI PRO</span>
-            <span class="w-1 h-1 bg-slate-800 rounded-full"></span>
-            <span>SECURE SERVER FRANKFURT</span>
+        <div class="mt-8 text-center">
+            <a href="/" class="text-xs text-slate-500 hover:text-blue-400">العودة للرئيسية</a>
         </div>
     </div>
 
-    <script>
-        async function sendData(e) {
-            e.preventDefault();
-            const phone = document.getElementById('phone').value;
-            const password = document.getElementById('password').value; // جلب كلمة السر
+    <footer class="mt-10 text-[10px] text-slate-700 font-bold uppercase tracking-[0.4em]">
+        Design by MisterAI
+    </footer>
 
-            const response = await fetch('/api/signup', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({phone, password}) // إرسال كلمة السر أيضاً
-            });
-            
-            const result = await response.json();
-            
-            if(result.status === "success") {
-                window.location.href = "/community"; // التحويل لصفحة المجتمع
-            } else {
-                alert(result.message);
-            }
-        }
-    </script>
 </body>
 </html>
