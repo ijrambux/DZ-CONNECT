@@ -1,33 +1,25 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>مجتمع DZ-CONNECT</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background: #000814; color: #fff; }
-        .neon-text { text-shadow: 0 0 10px #00d4ff; color: #00d4ff; }
-    </style>
-</head>
-<body class="p-6">
-    <nav class="flex justify-between items-center mb-10 p-4 border-b border-blue-900/50">
-        <h1 class="text-2xl font-black neon-text">DZ-CONNECT</h1>
-        <div class="flex items-center gap-3">
-            <span class="text-xs text-green-400">● متصل الآن</span>
-            <img src="https://flagcdn.com/w40/dz.png" class="rounded">
-        </div>
-    </nav>
-
-    <div class="max-w-4xl mx-auto text-center">
-        <h2 class="text-4xl font-bold mb-4">أهلاً بك في مجتمعنا الأسري 🇩🇿</h2>
-        <p class="text-slate-400 mb-10">هنا يلتقي الجزائريون في بيئة آمنة ومتطورة.</p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-slate-900/50 p-6 rounded-3xl border border-blue-900/30 text-right">
-                <p class="text-blue-300 mb-2">MisterAI PRO:</p>
-                <p>مرحباً بكل الأعضاء الجدد في المنصة التجريبية!</p>
-            </div>
-        </div>
+<div id="ai-assistant" class="fixed bottom-10 left-10 w-80 bg-slate-900 border border-blue-500 rounded-3xl shadow-2xl overflow-hidden hidden">
+    <div class="bg-blue-600 p-4 font-bold text-center">مساعد DZ-CONNECT الذكي</div>
+    <div id="chat-box" class="h-64 p-4 overflow-y-auto text-sm space-y-2">
+        <p class="text-blue-300">مرحباً! أنا ذكاء DZ-CONNECT الاصطناعي، كيف يمكنني خدمتك في مجتمعنا؟</p>
     </div>
-</body>
-</html>
+    <div class="p-2 border-t border-slate-700 flex">
+        <input type="text" id="user-msg" class="bg-black border-none w-full p-2 outline-none text-xs" placeholder="اسألني أي شيء...">
+        <button onclick="aiAsk()" class="p-2 text-blue-400">➤</button>
+    </div>
+</div>
+
+<script>
+    function aiAsk() {
+        const msg = document.getElementById('user-msg').value;
+        const chat = document.getElementById('chat-box');
+        if(msg) {
+            chat.innerHTML += `<p class="text-white text-right font-bold">أنت: ${msg}</p>`;
+            chat.innerHTML += `<p class="text-green-400">الذكاء: شكراً لسؤالك! فكرتك وصلت لمصطفى (MisterAI) ونحن نعمل على تطوير الرد التلقائي الكامل.</p>`;
+            document.getElementById('user-msg').value = '';
+            chat.scrollTop = chat.scrollHeight;
+        }
+    }
+    // إظهار البوت بعد 3 ثواني لإبهار المستخدم
+    setTimeout(() => document.getElementById('ai-assistant').classList.remove('hidden'), 3000);
+</script>
