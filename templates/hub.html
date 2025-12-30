@@ -7,25 +7,37 @@
     <style>
         body { background: #00050a; color: white; font-family: sans-serif; }
         .brand { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-weight: 900; }
-        .admin-msg { background: rgba(255, 215, 0, 0.1); border-right: 4px solid gold; }
+        .admin-box { background: rgba(255, 215, 0, 0.05); border-left: 4px solid gold; }
     </style>
 </head>
-<body class="p-6">
+<body class="p-4 md:p-8">
     <div class="max-w-6xl mx-auto">
-        <h1 class="brand text-3xl mb-8">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 bg-blue-900/10 p-8 rounded-3xl border border-blue-500/10">
-                <h2 class="text-2xl font-bold mb-4">Official Announcement 📢</h2>
-                <p class="text-slate-400">Welcome to the first secure Algerian Hub. Feel free to discuss tech and innovation in English!</p>
-            </div>
-            <div class="bg-black/50 p-6 rounded-3xl border border-blue-500/10 h-[500px] flex flex-col">
-                <div id="box" class="flex-grow overflow-y-auto space-y-3 mb-4 pr-2 text-xs"></div>
-                <div class="flex gap-1 mb-2">
-                    <button onclick="add('🇩🇿')">🇩🇿</button><button onclick="add('🔥')">🔥</button><button onclick="add('🚀')">🚀</button>
+        <header class="flex justify-between items-center mb-10">
+            <h1 class="brand text-3xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+            <span class="text-xs text-blue-500 font-bold uppercase tracking-widest">Algerian Hub Live</span>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-blue-900/10 p-10 rounded-[2.5rem] border border-blue-500/10">
+                    <h2 class="text-2xl font-bold mb-4 text-white">Welcome, Algerian Pioneers 🇩🇿</h2>
+                    <p class="text-slate-400 leading-relaxed">This is your sovereign space for high-level tech discussion. All communications are secured under MisterAI's core protocols.</p>
                 </div>
+            </div>
+
+            <div class="bg-black/40 p-6 rounded-[2.5rem] border border-blue-500/10 h-[550px] flex flex-col shadow-2xl">
+                <div id="box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2 text-xs"></div>
+                
+                <div class="flex gap-2 mb-3 bg-blue-950/30 p-2 rounded-xl">
+                    <button onclick="add('🇩🇿')" class="hover:scale-125 transition">🇩🇿</button>
+                    <button onclick="add('🔥')" class="hover:scale-125 transition">🔥</button>
+                    <button onclick="add('🚀')" class="hover:scale-125 transition">🚀</button>
+                    <button onclick="add('👑')" class="hover:scale-125 transition">👑</button>
+                </div>
+
                 <div class="flex gap-2">
-                    <input id="m" type="text" placeholder="Type..." class="w-full bg-blue-900/20 p-3 rounded-xl outline-none border border-blue-500/10">
-                    <button onclick="send()" class="bg-blue-600 px-4 rounded-xl">➤</button>
+                    <input id="m" type="text" placeholder="Share your thoughts..." class="w-full bg-blue-900/20 p-4 rounded-2xl outline-none border border-blue-500/10 text-xs">
+                    <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-bold">➤</button>
                 </div>
             </div>
         </div>
@@ -36,17 +48,17 @@
             const r = await fetch('/api/chat');
             const d = await r.json();
             document.getElementById('box').innerHTML = d.map(m => `
-                <div class="p-3 rounded-xl ${m.admin ? 'admin-msg' : 'bg-blue-900/20'}">
-                    <b class="${m.admin ? 'text-yellow-400' : 'text-blue-400'}">${m.user} ${m.admin ? '👑' : ''}</b>
-                    <p class="mt-1">${m.text}</p>
+                <div class="p-3 rounded-2xl ${m.admin ? 'admin-box' : 'bg-blue-900/20 shadow-inner'}">
+                    <b class="${m.admin ? 'text-yellow-400' : 'text-blue-400'} uppercase text-[9px] tracking-widest">${m.user} ${m.admin ? '👑' : ''}</b>
+                    <p class="mt-1 text-slate-200 text-sm">${m.text}</p>
                 </div>`).join('');
         }
         async function send() {
-            const i = document.getElementById('m');
+            const i = document.getElementById('m'); if(!i.value) return;
             await fetch('/api/chat', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({msg: i.value})});
             i.value = ''; load();
         }
-        setInterval(load, 2000);
+        setInterval(load, 2000); load();
     </script>
 </body>
 </html>
