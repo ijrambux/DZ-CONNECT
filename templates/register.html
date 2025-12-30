@@ -2,128 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Secure Registration</title>
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        
-        body { 
-            background: #000814; 
-            color: #fff; 
-            font-family: 'Inter', sans-serif; 
-            overflow: hidden;
-        }
-
-        /* ستايل الشعار: دوائر زرقاء وحروف بيضاء ناصعة */
-        .brand-logo {
-            font-size: 3rem;
-            font-weight: 900;
-            filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%);
-            text-shadow: 0 0 25px rgba(0, 212, 255, 0.6);
-            display: inline-block;
-            letter-spacing: -2px;
-        }
-
-        /* الحاوية الزجاجية الاحترافية */
-        .glass-container {
-            background: rgba(0, 15, 35, 0.85);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            backdrop-filter: blur(30px);
-            box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
-        }
-
-        /* ستايل المدخلات (أبيض من الداخل للوضوح) */
-        .input-premium {
-            background: #eef2ff !important;
-            color: #000 !important;
-            font-weight: 700;
-            text-align: center;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
-
-        .input-premium:focus {
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
-            transform: scale(1.02);
-        }
-
-        .btn-glow {
-            background: #0066ff;
-            box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
-            transition: all 0.3s ease;
-        }
-
-        .btn-glow:hover {
-            background: #0052cc;
-            box-shadow: 0 0 30px rgba(0, 102, 255, 0.6);
-            transform: translateY(-2px);
-        }
+        body { background: #000814; color: white; font-family: sans-serif; }
+        .brand { font-size: 3rem; font-weight: 900; filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); text-shadow: 0 0 20px #00d4ff; }
+        .inp { background: #eef2ff; color: black; font-weight: bold; text-align: center; }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-
-    <div class="max-w-md w-full glass-container p-12 rounded-[3.5rem] text-center">
-        
-        <div class="mb-10">
-            <img src="https://flagcdn.com/w40/dz.png" class="inline-block mb-4 shadow-xl rounded-sm">
-            <p class="text-[9px] text-blue-400 tracking-[0.3em] uppercase mb-2 font-bold">Secure Identity Gateway</p>
-            <h1 class="brand-logo">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-        </div>
-
-        <div class="space-y-5">
-            <div>
-                <input id="nickname" type="text" placeholder="CHOOSE NICKNAME" 
-                    class="w-full p-5 rounded-2xl input-premium outline-none border-none">
-            </div>
-            
-            <div>
-                <input id="phone" type="text" placeholder="PHONE NUMBER" 
-                    class="w-full p-5 rounded-2xl input-premium outline-none border-none">
-            </div>
-
-            <button onclick="requestVerification()" 
-                class="w-full btn-glow py-5 rounded-2xl font-black text-xl text-white uppercase tracking-widest active:scale-95">
-                Get Access Code
-            </button>
-        </div>
-
-        <div class="mt-12 text-[9px] text-slate-600 font-bold tracking-tighter uppercase">
-            Sovereign Encryption Active ● Frankfurt Nodes ● MisterAI PRO
+    <div class="max-w-md w-full bg-blue-950/20 p-12 rounded-[3.5rem] border border-blue-500/20 text-center backdrop-blur-xl">
+        <h1 class="brand mb-8">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+        <div class="space-y-4">
+            <input id="nick" type="text" placeholder="NICKNAME" class="w-full p-5 rounded-2xl inp outline-none">
+            <input id="phone" type="text" placeholder="PHONE NUMBER" class="w-full p-5 rounded-2xl inp outline-none">
+            <button onclick="goAuth()" class="w-full bg-blue-600 py-5 rounded-2xl font-black text-xl shadow-lg">GET CODE</button>
         </div>
     </div>
-
     <script>
-        async function requestVerification() {
-            const nick = document.getElementById('nickname').value;
-            const ph = document.getElementById('phone').value;
-
-            if (!nick || !ph) {
-                alert("Please fill all fields!");
-                return;
-            }
-
-            try {
-                const response = await fetch('/api/auth', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nickname: nick, phone: ph })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    // الانتقال لصفحة التحقق بالكود (التي سأرسلها لك لاحقاً)
-                    window.location.href = data.url;
-                } else {
-                    alert(data.message || "Registration failed. Try a different name.");
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                alert("Connection error. Is the server running?");
-            }
+        async function goAuth() {
+            const res = await fetch('/api/auth', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({nickname: document.getElementById('nick').value, phone: document.getElementById('phone').value})
+            });
+            const data = await res.json();
+            if(res.ok) window.location.href = data.url; else alert(data.message);
         }
     </script>
-
 </body>
 </html>
