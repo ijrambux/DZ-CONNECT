@@ -3,43 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Hub</title>
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Cinema Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
     <style>
         body { background: #00050a; color: white; font-family: sans-serif; }
         .brand { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-weight: 900; }
+        .video-box { border-radius: 2rem; overflow: hidden; border: 1px solid rgba(0, 102, 255, 0.3); background: #000; }
+        #box::-webkit-scrollbar { width: 4px; }
+        #box::-webkit-scrollbar-thumb { background: #0066ff; border-radius: 10px; }
         .admin-box { background: rgba(255, 215, 0, 0.05); border-left: 4px solid gold; }
     </style>
 </head>
-<body class="p-4 md:p-8">
-    <div class="max-w-4xl mx-auto">
-        <header class="flex justify-between items-center mb-6">
-            <h1 class="brand text-2xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-            <span class="text-[10px] text-blue-500 font-bold uppercase">Sovereign Hub</span>
+<body class="p-2 md:p-6">
+    <div class="max-w-7xl mx-auto">
+        <header class="flex justify-between items-center mb-4 px-4">
+            <h1 class="brand text-2xl md:text-3xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span class="text-[10px] text-green-500 font-bold uppercase tracking-widest">Cinema Active</span>
+            </div>
         </header>
 
-        <div class="bg-black/40 p-4 md:p-6 rounded-[2.5rem] border border-blue-500/10 h-[75vh] flex flex-col shadow-2xl">
-            <div id="box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2"></div>
-            
-            <div class="flex gap-2 mb-3 bg-blue-950/30 p-2 rounded-xl justify-center items-center">
-                <button id="micBtn" class="bg-red-600 w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all">🎤</button>
-                <span id="st" class="text-[10px] text-red-400 hidden animate-pulse">Recording...</span>
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div class="lg:col-span-3 space-y-4">
+                <div class="video-box shadow-2xl aspect-video">
+                    <video id="live-player" class="video-js vjs-fluid vjs-default-skin" controls preload="auto" data-setup='{}'>
+                        <source id="video-source" src="https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8" type="application/x-mpegURL">
+                    </video>
+                </div>
+                
+                <div class="bg-blue-900/10 p-4 rounded-2xl border border-blue-500/20 flex flex-wrap gap-4 items-center">
+                    <label class="font-bold text-blue-400 text-sm">SELECT CHANNEL:</label>
+                    <select id="channel-select" onchange="changeChannel(this.value)" class="bg-black text-white p-2 rounded-xl border border-blue-500/40 text-sm outline-none flex-grow">
+                        <option value="https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8">Rakuten Top Movies UK</option>
+                        <option value="https://54045f0c40fd442c8b06df076aaf1e85.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6065/master.m3u8">Rakuten Action UK</option>
+                        <option value="https://9be783d652cd4b099cf63e1dc134c4a3.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6181/master.m3u8">Rakuten Comedy UK</option>
+                        <option value="https://fee09fd665814f51b939b6d106cf5f66.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6093/master.m3u8">Rakuten Drama UK</option>
+                        <option value="https://a9c57ec7ec5e4b7daeacc6316a0bb404.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6069/master.m3u8">Rakuten Action Spain</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="flex gap-2">
-                <input id="m" type="text" placeholder="Your message..." class="w-full bg-blue-900/20 p-4 rounded-2xl outline-none border border-blue-500/10 text-sm">
-                <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-bold">➤</button>
+            <div class="bg-black/40 p-4 rounded-[2.5rem] border border-blue-500/10 h-[600px] flex flex-col shadow-2xl backdrop-blur-md">
+                <div id="box" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-1 text-xs"></div>
+                
+                <div class="flex gap-2 mb-3 overflow-x-auto p-1 bg-white/5 rounded-xl">
+                    <button onclick="add('🇩🇿')" class="text-lg">🇩🇿</button>
+                    <button onclick="add('🍿')" class="text-lg">🍿</button>
+                    <button onclick="add('🎬')" class="text-lg">🎬</button>
+                    <button onclick="add('🔥')" class="text-lg">🔥</button>
+                    <button onclick="add('😂')" class="text-lg">😂</button>
+                </div>
+
+                <div class="flex items-center gap-2 mb-3">
+                    <button id="mic" class="bg-red-600 w-10 h-10 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all">🎤</button>
+                    <span id="st" class="text-[9px] text-red-500 hidden animate-pulse font-bold">REC</span>
+                </div>
+
+                <div class="flex gap-2">
+                    <input id="m" type="text" placeholder="Comment..." class="w-full bg-blue-900/20 p-3 rounded-xl outline-none border border-blue-500/10 text-xs">
+                    <button onclick="send()" class="bg-blue-600 px-4 rounded-xl font-bold">➤</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
     <script>
-        let rec; let chunks = [];
-        const btn = document.getElementById('micBtn');
+        const player = videojs('live-player');
+        
+        function changeChannel(url) {
+            player.src({ type: 'application/x-mpegURL', src: url });
+            player.play();
+        }
 
-        btn.onclick = async () => {
+        // --- نظام الدردشة والصوت ---
+        let rec; let chunks = [];
+        const micBtn = document.getElementById('mic');
+
+        micBtn.onclick = async () => {
             if (rec && rec.state === "recording") {
-                rec.stop(); btn.style.background = "red";
+                rec.stop(); micBtn.style.background = "red";
                 document.getElementById('st').classList.add('hidden');
             } else {
                 try {
@@ -51,18 +96,20 @@
                         const form = new FormData(); form.append('audio', blob);
                         await fetch('/api/chat', { method: 'POST', body: form }); load();
                     };
-                    rec.start(); btn.style.background = "darkred";
+                    rec.start(); micBtn.style.background = "darkred";
                     document.getElementById('st').classList.remove('hidden');
-                } catch (err) { alert("Please allow microphone access and use HTTPS!"); }
+                } catch (err) { alert("HTTPS Required for Voice!"); }
             }
         };
+
+        function add(e){ document.getElementById('m').value += e; }
 
         async function load() {
             const r = await fetch('/api/chat'); const d = await r.json();
             document.getElementById('box').innerHTML = d.map(m => `
-                <div class="p-3 rounded-2xl ${m.admin ? 'admin-box' : 'bg-blue-900/20'}">
-                    <b class="${m.admin ? 'text-yellow-400' : 'text-blue-400'} text-[10px] uppercase tracking-tighter">${m.user}</b>
-                    ${m.type === 'audio' ? `<audio controls src="${m.audio_url}" class="w-full mt-2 h-10"></audio>` : `<p class="mt-1 text-slate-200 text-sm">${m.text}</p>`}
+                <div class="p-2 rounded-xl ${m.admin ? 'admin-box' : 'bg-blue-900/10 shadow-sm'}">
+                    <b class="${m.admin ? 'text-yellow-400' : 'text-blue-400'} text-[8px] uppercase">${m.user}</b>
+                    ${m.type === 'audio' ? `<audio controls src="${m.audio_url}" class="w-full mt-1 h-8"></audio>` : `<p class="mt-1 text-slate-200 text-xs">${m.text}</p>`}
                 </div>`).join('');
             document.getElementById('box').scrollTop = document.getElementById('box').scrollHeight;
         }
