@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Algerian & beIN Hub</title>
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | 2025 Special</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -29,8 +29,9 @@
         .channel-card:hover { background: rgba(59, 130, 246, 0.1); border-color: #3b82f6; transform: translateY(-3px); }
         
         .icon-circle { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .bg-dz { background: linear-gradient(135deg, #059669, #064e3b); } /* أخضر جزائري */
-        .bg-bein { background: linear-gradient(135deg, #7c3aed, #4c1d95); } /* بنفسجي بين */
+        .bg-cup { background: linear-gradient(135deg, #f59e0b, #92400e); } /* ذهبي للبطولة */
+        .bg-dz { background: linear-gradient(135deg, #10b981, #064e3b); } /* أخضر للجزائر */
+        .bg-bein { background: linear-gradient(135deg, #7c3aed, #4c1d95); }
         
         .section-title { font-size: 16px; font-weight: 900; margin: 25px 0 15px 0; color: #60a5fa; border-right: 4px solid #3b82f6; padding-right: 10px; }
         .bubble { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 10px; margin-bottom: 8px; }
@@ -40,14 +41,14 @@
     <div class="max-w-[1400px] mx-auto">
         <header class="flex justify-between items-center mb-6">
             <h1 class="brand text-3xl md:text-5xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-            <div class="bg-red-600/20 px-4 py-1 rounded-full border border-red-500/30 text-red-500 text-[10px] font-black uppercase">Live Sports & DZ</div>
+            <div class="bg-yellow-600/20 px-4 py-1 rounded-full border border-yellow-500/30 text-yellow-500 text-[10px] font-black uppercase">Africa Cup 2025 Edition</div>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2">
                 <div class="chat-wrapper shadow-2xl mb-6">
                     <div class="custom-logo">🏴‍☠️🐭 𝓜𝓸𝓾𝓼𝓮 🐭⚓️</div>
-                    <div class="text-center text-white text-sm font-bold pb-4">🎧 انقر للدخول في محادثة صوتية مع الأعضاء</div>
+                    <div class="text-center text-white text-sm font-bold pb-4">🎧 انضم للدردشة الصوتية لمتابعة المباريات</div>
                     <div class="flex justify-center pb-4">
                         <a href="https://meet.jit.si/dznetvoice" target="_blank" class="bg-blue-600 px-8 py-2 rounded-full text-xs font-black shadow-lg">🚀 دخول الغرفة الآن</a>
                     </div>
@@ -55,7 +56,19 @@
 
                 <div class="bg-white/5 p-6 rounded-[2.5rem] border border-white/5">
                     
-                    <h2 class="section-title">🇩🇿 القنوات الجزائرية</h2>
+                    <h2 class="section-title text-yellow-500">🏆 AFRICA CUP 2025 | OTT</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div onclick="openLink('400070')" class="channel-card">
+                            <div class="icon-circle bg-cup">🌍</div>
+                            <span class="text-[11px] font-bold">AFRICA CUP 1</span>
+                        </div>
+                        <div onclick="openLink('400071')" class="channel-card">
+                            <div class="icon-circle bg-cup">🌍</div>
+                            <span class="text-[11px] font-bold">AFRICA CUP 2</span>
+                        </div>
+                    </div>
+
+                    <h2 class="section-title text-green-500">🇩🇿 ALGERIE | OTT</h2>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <div onclick="openLink('27040')" class="channel-card">
                             <div class="icon-circle bg-dz">🇩🇿</div>
@@ -63,7 +76,7 @@
                         </div>
                         <div onclick="openLink('27038')" class="channel-card">
                             <div class="icon-circle bg-dz">⚽</div>
-                            <span class="text-[11px] font-bold">الجزائرية 6 (Sports)</span>
+                            <span class="text-[11px] font-bold">الجزائرية 6</span>
                         </div>
                         <div onclick="openLink('27031')" class="channel-card">
                             <div class="icon-circle bg-dz">📢</div>
@@ -75,7 +88,7 @@
                         </div>
                     </div>
 
-                    <h2 class="section-title">⚽ باقة beIN SPORTS</h2>
+                    <h2 class="section-title text-purple-500">⚽ beIN SPORTS | OTT</h2>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <div onclick="openLink('27111')" class="channel-card">
                             <div class="icon-circle bg-bein">1</div>
@@ -85,30 +98,14 @@
                             <div class="icon-circle bg-bein">2</div>
                             <span class="text-[11px] font-bold">beIN HD 2</span>
                         </div>
-                        <div onclick="openLink('27109')" class="channel-card">
-                            <div class="icon-circle bg-bein">3</div>
-                            <span class="text-[11px] font-bold">beIN HD 3</span>
-                        </div>
-                        <div onclick="openLink('27107')" class="channel-card">
-                            <div class="icon-circle bg-bein">4</div>
-                            <span class="text-[11px] font-bold">beIN HD 4</span>
-                        </div>
-                        <div onclick="openLink('27105')" class="channel-card">
-                            <div class="icon-circle bg-bein">6</div>
-                            <span class="text-[11px] font-bold">beIN HD 6</span>
-                        </div>
-                        <div onclick="openLink('27099')" class="channel-card">
-                            <div class="icon-circle bg-bein">🏆</div>
-                            <span class="text-[11px] font-bold">beIN 1 FHD</span>
-                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="bg-black/60 p-5 rounded-[2.5rem] border border-white/5 h-[700px] flex flex-col">
-                <div id="box" class="flex-grow overflow-y-auto pr-2" dir="ltr"></div>
+                <div id="box" class="flex-grow overflow-y-auto pr-2"></div>
                 <div class="flex gap-2 mt-4">
-                    <input id="m" type="text" placeholder="اكتب رسالة..." class="w-full bg-blue-900/10 p-4 rounded-2xl outline-none border border-blue-500/20 text-right">
+                    <input id="m" type="text" placeholder="اكتب رسالة..." class="w-full bg-blue-900/10 p-4 rounded-2xl outline-none border border-blue-500/20">
                     <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-black">➤</button>
                 </div>
             </div>
@@ -128,7 +125,7 @@
         async function load() {
             const r = await fetch('/api/chat'); const d = await r.json();
             document.getElementById('box').innerHTML = d.map(m => `
-                <div class="bubble text-right">
+                <div class="bubble">
                     <div class="text-[10px] font-black text-blue-400 uppercase mb-1">${m.user}</div>
                     <div class="text-white text-sm">${m.text}</div>
                 </div>`).join('');
