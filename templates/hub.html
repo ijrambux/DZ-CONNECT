@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | MisterAI Auto-Hub</title>
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Algerian & beIN Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { background: #00050a; color: white; font-family: 'Cairo', sans-serif; }
         .brand { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-weight: 900; }
         
-        /* تأثير Mouse المتحرك الذهبي */
         .chat-wrapper {
             border-radius: 20px; overflow: hidden;
             background: linear-gradient(270deg, #1a1a1a, #2c3e50, #1a1a1a);
@@ -19,103 +17,120 @@
             border: 1px solid rgba(255, 215, 0, 0.3); margin-bottom: 20px;
         }
         @keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-        .custom-logo { text-align: center; font-size: 28px; color: #ffd700; padding-top: 15px; font-family: cursive; }
+        .custom-logo { text-align: center; font-size: 28px; color: #ffd700; padding: 15px 0; font-family: cursive; }
 
-        /* تنسيق الأزرار الذكية */
-        .channel-btn { padding: 15px 10px; font-size: 12px !important; font-weight: 800; border-radius: 15px; transition: 0.3s; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-sport { background: rgba(220, 38, 38, 0.2); color: #f87171; border-color: rgba(220, 38, 38, 0.4); }
-        .btn-movie { background: rgba(30, 58, 138, 0.3); color: #60a5fa; border-color: rgba(59, 130, 246, 0.4); }
-        .channel-btn:active { transform: scale(0.9); }
+        .channel-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px; padding: 15px;
+            text-align: center; transition: 0.3s; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .channel-card:hover { background: rgba(59, 130, 246, 0.1); border-color: #3b82f6; transform: translateY(-3px); }
         
-        .section-title { font-size: 14px; font-weight: 900; margin: 25px 0 10px 0; color: #94a3b8; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
-        .bubble { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; padding: 12px; margin-bottom: 10px; }
+        .icon-circle { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .bg-dz { background: linear-gradient(135deg, #059669, #064e3b); } /* أخضر جزائري */
+        .bg-bein { background: linear-gradient(135deg, #7c3aed, #4c1d95); } /* بنفسجي بين */
+        
+        .section-title { font-size: 16px; font-weight: 900; margin: 25px 0 15px 0; color: #60a5fa; border-right: 4px solid #3b82f6; padding-right: 10px; }
+        .bubble { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 10px; margin-bottom: 8px; }
     </style>
 </head>
-<body class="p-3">
-    <div class="max-w-[1600px] mx-auto">
+<body class="p-4">
+    <div class="max-w-[1400px] mx-auto">
         <header class="flex justify-between items-center mb-6">
             <h1 class="brand text-3xl md:text-5xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-            <div class="bg-blue-600/20 px-4 py-1 rounded-full border border-blue-500/30 text-blue-400 text-xs font-black">AUTO-LINK V3</div>
+            <div class="bg-red-600/20 px-4 py-1 rounded-full border border-red-500/30 text-red-500 text-[10px] font-black uppercase">Live Sports & DZ</div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div class="lg:col-span-3 space-y-6">
-                <div class="rounded-[2.5rem] overflow-hidden border-2 border-white/5 aspect-video bg-black shadow-2xl">
-                    <video id="live-player" class="video-js vjs-fluid vjs-default-skin" controls preload="auto">
-                        <source src="https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8" type="application/x-mpegURL">
-                    </video>
-                </div>
-
-                <div class="chat-wrapper shadow-2xl">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <div class="chat-wrapper shadow-2xl mb-6">
                     <div class="custom-logo">🏴‍☠️🐭 𝓜𝓸𝓾𝓼𝓮 🐭⚓️</div>
-                    <div class="text-center text-white text-md font-black py-2">🎧 غرفة الدردشة الصوتية - DZ-CONNECT</div>
-                    <div class="text-center mb-4">
-                        <a href="https://meet.jit.si/dznetvoice" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 px-8 py-2 rounded-full text-xs font-black transition-all">🚀 انضم للمكالمة الآن</a>
+                    <div class="text-center text-white text-sm font-bold pb-4">🎧 انقر للدخول في محادثة صوتية مع الأعضاء</div>
+                    <div class="flex justify-center pb-4">
+                        <a href="https://meet.jit.si/dznetvoice" target="_blank" class="bg-blue-600 px-8 py-2 rounded-full text-xs font-black shadow-lg">🚀 دخول الغرفة الآن</a>
                     </div>
-                    <iframe allow="microphone; camera" src="https://meet.jit.si/dznetvoice" style="height: 400px; width: 100%; border: none;"></iframe>
                 </div>
 
-                <div class="bg-white/5 p-6 rounded-[2.5rem] border border-white/10 shadow-inner">
+                <div class="bg-white/5 p-6 rounded-[2.5rem] border border-white/5">
                     
-                    <div class="section-title text-red-500">⚽ BEIN SPORTS AR (Auto-Sync)</div>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        <button onclick="playAuto('27111')" class="channel-btn btn-sport">⚽ BEIN HD 1</button>
-                        <button onclick="playAuto('400056')" class="channel-btn btn-sport">⚽ BEIN HD 2</button>
-                        <button onclick="playAuto('27099')" class="channel-btn btn-sport">🏆 BEIN 1 FHD</button>
-                        <button onclick="playAuto('27109')" class="channel-btn btn-sport">⚽ BEIN HD 3</button>
-                        <button onclick="playAuto('27107')" class="channel-btn btn-sport">⚽ BEIN HD 4</button>
-                        <button onclick="playAuto('27105')" class="channel-btn btn-sport">⚽ BEIN HD 6</button>
+                    <h2 class="section-title">🇩🇿 القنوات الجزائرية</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div onclick="openLink('27040')" class="channel-card">
+                            <div class="icon-circle bg-dz">🇩🇿</div>
+                            <span class="text-[11px] font-bold">الجزائرية 1</span>
+                        </div>
+                        <div onclick="openLink('27038')" class="channel-card">
+                            <div class="icon-circle bg-dz">⚽</div>
+                            <span class="text-[11px] font-bold">الجزائرية 6 (Sports)</span>
+                        </div>
+                        <div onclick="openLink('27031')" class="channel-card">
+                            <div class="icon-circle bg-dz">📢</div>
+                            <span class="text-[11px] font-bold">النهار TV</span>
+                        </div>
+                        <div onclick="openLink('27030')" class="channel-card">
+                            <div class="icon-circle bg-dz">✨</div>
+                            <span class="text-[11px] font-bold">الشروق TV</span>
+                        </div>
                     </div>
 
-                    <div class="section-title text-blue-400">🎬 RAKUTEN PREMIUM MOVIES</div>
+                    <h2 class="section-title">⚽ باقة beIN SPORTS</h2>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <button onclick="playSafe('https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8')" class="channel-btn btn-movie">TOP MOVIES UK</button>
-                        <button onclick="playSafe('https://54045f0c40fd442c8b06df076aaf1e85.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6065/master.m3u8')" class="channel-btn btn-movie">ACTION MOVIES</button>
-                        <button onclick="playSafe('https://9be783d652cd4b099cf63e1dc134c4a3.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6181/master.m3u8')" class="channel-btn btn-movie">COMEDY UK</button>
-                        <button onclick="playSafe('https://fee09fd665814f51b939b6d106cf5f66.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6093/master.m3u8')" class="channel-btn btn-movie">DRAMA MOVIES</button>
+                        <div onclick="openLink('27111')" class="channel-card">
+                            <div class="icon-circle bg-bein">1</div>
+                            <span class="text-[11px] font-bold">beIN HD 1</span>
+                        </div>
+                        <div onclick="openLink('400056')" class="channel-card">
+                            <div class="icon-circle bg-bein">2</div>
+                            <span class="text-[11px] font-bold">beIN HD 2</span>
+                        </div>
+                        <div onclick="openLink('27109')" class="channel-card">
+                            <div class="icon-circle bg-bein">3</div>
+                            <span class="text-[11px] font-bold">beIN HD 3</span>
+                        </div>
+                        <div onclick="openLink('27107')" class="channel-card">
+                            <div class="icon-circle bg-bein">4</div>
+                            <span class="text-[11px] font-bold">beIN HD 4</span>
+                        </div>
+                        <div onclick="openLink('27105')" class="channel-card">
+                            <div class="icon-circle bg-bein">6</div>
+                            <span class="text-[11px] font-bold">beIN HD 6</span>
+                        </div>
+                        <div onclick="openLink('27099')" class="channel-card">
+                            <div class="icon-circle bg-bein">🏆</div>
+                            <span class="text-[11px] font-bold">beIN 1 FHD</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-black/60 p-5 rounded-[2.5rem] border border-blue-500/10 h-[850px] flex flex-col backdrop-blur-3xl shadow-2xl">
-                <div id="box" class="flex-grow overflow-y-auto pr-2"></div>
+            <div class="bg-black/60 p-5 rounded-[2.5rem] border border-white/5 h-[700px] flex flex-col">
+                <div id="box" class="flex-grow overflow-y-auto pr-2" dir="ltr"></div>
                 <div class="flex gap-2 mt-4">
-                    <input id="m" type="text" placeholder="أرسل رسالة..." class="w-full bg-blue-900/20 p-5 rounded-2xl outline-none border border-blue-500/10 text-lg">
-                    <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-black text-2xl active:scale-90">➤</button>
+                    <input id="m" type="text" placeholder="اكتب رسالة..." class="w-full bg-blue-900/10 p-4 rounded-2xl outline-none border border-blue-500/20 text-right">
+                    <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-black">➤</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
     <script>
-        const p = videojs('live-player');
-
-        // --- إعدادات السيرفر الأوتوماتيكي (سيرفر شفيق) ---
         const IPTV_SERVER = "http://fr.ottv.pro";
         const IPTV_USER = "4476647188407159";
         const IPTV_PASS = "4476647188407159";
 
-        // وظيفة التشغيل الأوتوماتيكي لقنوات الرياضة (HTTP)
-        function playAuto(channelID) {
-            const finalURL = `${IPTV_SERVER}/live/${IPTV_USER}/${IPTV_PASS}/${channelID}.m3u8`;
-            // فتح في نافذة جديدة لتجاوز حماية HTTPS في Render
-            window.open(finalURL, '_blank');
+        function openLink(id) {
+            const url = `${IPTV_SERVER}/live/${IPTV_USER}/${IPTV_PASS}/${id}.m3u8`;
+            window.open(url, '_blank');
         }
 
-        // وظيفة التشغيل داخل الموقع للقنوات الآمنة (HTTPS)
-        function playSafe(url) {
-            p.src({type: 'application/x-mpegURL', src: url});
-            p.play();
-        }
-
-        // نظام الدردشة
         async function load() {
             const r = await fetch('/api/chat'); const d = await r.json();
             document.getElementById('box').innerHTML = d.map(m => `
-                <div class="bubble">
+                <div class="bubble text-right">
                     <div class="text-[10px] font-black text-blue-400 uppercase mb-1">${m.user}</div>
-                    <div class="text-white font-medium">${m.text}</div>
+                    <div class="text-white text-sm">${m.text}</div>
                 </div>`).join('');
             document.getElementById('box').scrollTop = document.getElementById('box').scrollHeight;
         }
