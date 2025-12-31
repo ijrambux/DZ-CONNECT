@@ -3,73 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Voice Hub</title>
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Auto-Voice Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <style>
         body { background: #00050a; color: white; font-family: sans-serif; }
         .brand { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-weight: 900; }
-        
-        /* تصميم غرف الصوت */
-        .voice-card { background: linear-gradient(135deg, #0f172a, #1e3a8a); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 1.5rem; }
-        
-        /* فقاعات الدردشة المطورة */
-        .bubble { max-width: 85%; padding: 12px 16px; border-radius: 20px; margin-bottom: 10px; font-size: 17px; }
-        .bubble-other { background: rgba(30, 58, 138, 0.4); border: 1px solid rgba(59, 130, 246, 0.2); align-self: flex-start; }
-        .bubble-admin { background: rgba(255, 215, 0, 0.1); border: 1px solid gold; align-self: flex-start; }
-        
-        #box::-webkit-scrollbar { width: 4px; }
-        #box::-webkit-scrollbar-thumb { background: #0066ff; border-radius: 10px; }
-        .channel-btn { padding: 15px 10px; font-size: 12px; font-weight: 800; border-radius: 1rem; transition: 0.3s; }
+        .voice-room { background: linear-gradient(135deg, #0f172a, #1e3a8a); border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 2rem; }
+        .bubble { max-width: 85%; padding: 12px 16px; border-radius: 20px; margin-bottom: 10px; font-size: 17px; background: rgba(30, 58, 138, 0.4); border: 1px solid rgba(59, 130, 246, 0.2); }
+        .user-mic-on { border-color: #22c55e; box-shadow: 0 0 15px rgba(34, 197, 94, 0.4); }
     </style>
 </head>
 <body class="p-3">
     <div class="max-w-[1600px] mx-auto">
-        <header class="flex justify-between items-center mb-4">
-            <h1 class="brand text-2xl md:text-4xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-            <div id="peer-id-display" class="text-[10px] text-blue-400 font-bold uppercase">Connecting to Voice...</div>
+        <header class="flex justify-between items-center mb-6 px-2">
+            <h1 class="brand text-3xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+            <div id="status" class="text-[10px] bg-blue-600/20 px-4 py-1 rounded-full border border-blue-500/30 text-blue-400 font-black uppercase">Voice Offline</div>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div class="lg:col-span-3 space-y-4">
-                <div class="rounded-3xl overflow-hidden border-2 border-blue-500/30 aspect-video bg-black">
+            <div class="lg:col-span-3 space-y-6">
+                <div class="rounded-[2rem] overflow-hidden border-2 border-blue-500/20 aspect-video bg-black shadow-2xl">
                     <video id="live-player" class="video-js vjs-fluid vjs-default-skin" controls preload="auto">
                         <source src="https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8" type="application/x-mpegURL">
                     </video>
                 </div>
 
-                <div class="voice-card p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-black text-green-400 flex items-center gap-2">● LIVE VOICE ROOM</span>
-                        <button onclick="startVoice()" class="bg-green-600 px-4 py-1 rounded-full text-[10px] font-bold">ACTIVATE MIC</button>
+                <div class="voice-room p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-sm font-black tracking-widest text-blue-300">LIVE VOICE CHANNEL</h2>
+                        <button id="call-btn" onclick="initVoice()" class="bg-green-600 hover:bg-green-500 px-6 py-2 rounded-full font-black text-xs transition-all shadow-lg active:scale-90">GO LIVE & JOIN OTHERS</button>
                     </div>
-                    <div id="voice-participants" class="flex gap-4 p-2 overflow-x-auto">
-                        <div class="flex flex-col items-center">
-                            <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center border-2 border-white">M</div>
-                            <span class="text-[9px] mt-1">MisterAI</span>
+                    <div id="active-speakers" class="flex gap-6 overflow-x-auto p-2">
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-14 h-14 bg-slate-800 rounded-full flex items-center justify-center border-2 border-slate-700">?</div>
+                            <span class="text-[10px] text-slate-500">Waiting...</span>
                         </div>
                     </div>
                 </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 bg-white/5 p-4 rounded-3xl">
-                    <button onclick="change('https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8')" class="channel-btn bg-blue-900/40 border border-blue-500/20">🎬 MOVIES</button>
-                    <button onclick="change('http://fr.ottv.pro/live/4476647188407159/4476647188407159/27111.m3u8')" class="channel-btn bg-red-900/40 border border-red-500/20">⚽ SPORT (HTTP)</button>
-                </div>
             </div>
 
-            <div class="bg-black/50 p-4 rounded-[2.5rem] border border-white/5 h-[700px] flex flex-col backdrop-blur-xl">
-                <div id="box" class="flex-grow overflow-y-auto flex flex-col pr-2"></div>
-                
-                <div class="flex gap-4 my-4 p-2 bg-white/5 rounded-2xl">
-                    <button onclick="add('🇩🇿')" class="text-3xl">🇩🇿</button>
-                    <button onclick="add('⚽')" class="text-3xl">⚽</button>
-                    <button onclick="add('🍿')" class="text-3xl">🍿</button>
-                </div>
-
-                <div class="flex gap-2">
-                    <input id="m" type="text" placeholder="Type..." class="w-full bg-blue-900/20 p-5 rounded-2xl outline-none text-lg">
-                    <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-black text-2xl">➤</button>
+            <div class="bg-black/60 p-5 rounded-[2.5rem] border border-white/5 h-[750px] flex flex-col backdrop-blur-3xl">
+                <div id="box" class="flex-grow overflow-y-auto pr-2 flex flex-col"></div>
+                <div class="flex gap-2 mt-4">
+                    <input id="m" type="text" placeholder="Message..." class="w-full bg-blue-900/20 p-5 rounded-2xl outline-none border border-blue-500/10 text-lg">
+                    <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-black text-2xl active:scale-95 transition-all">➤</button>
                 </div>
             </div>
         </div>
@@ -78,31 +57,63 @@
     <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
     <script>
         const p = videojs('live-player');
-        function change(u) { if(u.startsWith('http://')) window.open(u); else p.src({type: 'application/x-mpegURL', src: u}); p.play(); }
+        const peer = new Peer(); // إنشاء معرف Peer فريد لكل مستخدم
+        let myStream;
 
-        // --- نظام الصوت المباشر (PeerJS) ---
-        const peer = new Peer(); 
-        peer.on('open', id => document.getElementById('peer-id-display').innerText = "ID: " + id);
+        peer.on('open', id => {
+            console.log('My Peer ID is: ' + id);
+            document.getElementById('status').innerText = "Voice Ready: " + id;
+        });
 
-        async function startVoice() {
+        // استقبال المكالمات تلقائياً
+        peer.on('call', call => {
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+                call.answer(stream);
+                call.on('stream', remoteStream => {
+                    playRemoteStream(remoteStream);
+                });
+            });
+        });
+
+        async function initVoice() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                alert("Voice Active! Users can now call you via PeerID.");
-                // هنا يمكن إضافة منطق الربط التلقائي بين المستخدمين
-            } catch (e) { alert("HTTPS Required for Voice Call!"); }
+                myStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                document.getElementById('call-btn').innerText = "MIC ACTIVE 🟢";
+                document.getElementById('call-btn').classList.replace('bg-green-600', 'bg-blue-600');
+                
+                // تحديث واجهة المستخدم
+                const container = document.getElementById('active-speakers');
+                container.innerHTML = `
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center border-2 border-green-400 shadow-lg user-mic-on">M</div>
+                        <span class="text-[10px] text-green-400 font-bold tracking-widest">MisterAI (YOU)</span>
+                    </div>
+                `;
+                
+                // ملاحظة: هنا يجب إرسال PeerID لبقية المستخدمين عبر الـ API ليتصلوا بك
+                console.log("MisterAI is now broadcasting voice...");
+            } catch (e) {
+                alert("Please use HTTPS and allow Microphone access!");
+            }
         }
 
-        // --- نظام الدردشة بفقاعات ---
-        function add(e){ document.getElementById('m').value += e; }
+        function playRemoteStream(stream) {
+            const audio = document.createElement('audio');
+            audio.srcObject = stream;
+            audio.play();
+        }
+
+        // نظام الدردشة التقليدي
         async function load() {
             const r = await fetch('/api/chat'); const d = await r.json();
             document.getElementById('box').innerHTML = d.map(m => `
-                <div class="bubble ${m.admin ? 'bubble-admin' : 'bubble-other'}">
+                <div class="bubble">
                     <div class="text-[10px] font-black text-blue-400 uppercase mb-1">${m.user}</div>
                     <div class="text-white">${m.text}</div>
                 </div>`).join('');
             document.getElementById('box').scrollTop = document.getElementById('box').scrollHeight;
         }
+
         async function send() {
             const i = document.getElementById('m'); if(!i.value) return;
             await fetch('/api/chat', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({msg: i.value})});
