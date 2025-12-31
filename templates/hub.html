@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | Ultimate Hub</title>
+    <title>🅓🅩-🅒🅞🅝🅝🅔🅒🅣 | MisterAI Auto-Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
@@ -11,86 +11,77 @@
         body { background: #00050a; color: white; font-family: 'Cairo', sans-serif; }
         .brand { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-weight: 900; }
         
-        /* تأثير Mouse المتحرك */
+        /* تأثير Mouse المتحرك الذهبي */
         .chat-wrapper {
             border-radius: 20px; overflow: hidden;
             background: linear-gradient(270deg, #1a1a1a, #2c3e50, #1a1a1a);
             background-size: 600% 600%; animation: gradientShift 15s ease infinite;
-            border: 1px solid rgba(255, 215, 0, 0.2); margin-bottom: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3); margin-bottom: 20px;
         }
         @keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-        .custom-logo { text-align: center; font-size: 26px; color: #ffd700; padding-top: 15px; }
+        .custom-logo { text-align: center; font-size: 28px; color: #ffd700; padding-top: 15px; font-family: cursive; }
 
-        /* تنسيق الأزرار */
-        .channel-btn { padding: 14px 8px; font-size: 11px !important; font-weight: 800; border-radius: 12px; transition: 0.3s; text-align: center; }
-        .btn-sport { background: rgba(220, 38, 38, 0.2); border: 1px solid rgba(220, 38, 38, 0.4); color: #f87171; }
-        .btn-movie { background: rgba(30, 58, 138, 0.3); border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa; }
-        .section-title { font-size: 12px; font-weight: 900; margin: 20px 0 10px 0; display: flex; items-center gap: 2px; text-transform: uppercase; letter-spacing: 1px; }
+        /* تنسيق الأزرار الذكية */
+        .channel-btn { padding: 15px 10px; font-size: 12px !important; font-weight: 800; border-radius: 15px; transition: 0.3s; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-sport { background: rgba(220, 38, 38, 0.2); color: #f87171; border-color: rgba(220, 38, 38, 0.4); }
+        .btn-movie { background: rgba(30, 58, 138, 0.3); color: #60a5fa; border-color: rgba(59, 130, 246, 0.4); }
+        .channel-btn:active { transform: scale(0.9); }
         
-        #box { font-size: 17px !important; }
-        .bubble { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; padding: 12px; margin-bottom: 8px; }
+        .section-title { font-size: 14px; font-weight: 900; margin: 25px 0 10px 0; color: #94a3b8; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
+        .bubble { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; padding: 12px; margin-bottom: 10px; }
     </style>
 </head>
-<body class="p-2 md:p-4">
+<body class="p-3">
     <div class="max-w-[1600px] mx-auto">
-        <header class="flex justify-between items-center mb-4">
-            <h1 class="brand text-2xl md:text-4xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-            <span class="text-[10px] bg-blue-600/20 px-3 py-1 rounded-full text-blue-400 font-bold">V3.0 PREMIUM</span>
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="brand text-3xl md:text-5xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
+            <div class="bg-blue-600/20 px-4 py-1 rounded-full border border-blue-500/30 text-blue-400 text-xs font-black">AUTO-LINK V3</div>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div class="lg:col-span-3 space-y-4">
-                <div class="rounded-3xl overflow-hidden border-2 border-white/10 aspect-video bg-black shadow-2xl">
+            <div class="lg:col-span-3 space-y-6">
+                <div class="rounded-[2.5rem] overflow-hidden border-2 border-white/5 aspect-video bg-black shadow-2xl">
                     <video id="live-player" class="video-js vjs-fluid vjs-default-skin" controls preload="auto">
                         <source src="https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8" type="application/x-mpegURL">
                     </video>
                 </div>
 
-                <div class="chat-wrapper">
+                <div class="chat-wrapper shadow-2xl">
                     <div class="custom-logo">🏴‍☠️🐭 𝓜𝓸𝓾𝓼𝓮 🐭⚓️</div>
-                    <div class="text-center text-white text-sm font-bold p-2">🎧 غرفة الدردشة الصوتية - DzNet</div>
+                    <div class="text-center text-white text-md font-black py-2">🎧 غرفة الدردشة الصوتية - DZ-CONNECT</div>
                     <div class="text-center mb-4">
-                        <a href="https://meet.jit.si/dznetvoice" target="_blank" class="bg-blue-600 px-6 py-2 rounded-full text-xs font-bold">🚀 فتح في نافذة مستقلة</a>
+                        <a href="https://meet.jit.si/dznetvoice" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 px-8 py-2 rounded-full text-xs font-black transition-all">🚀 انضم للمكالمة الآن</a>
                     </div>
-                    <iframe allow="microphone; camera" src="https://meet.jit.si/dznetvoice" style="height: 350px; width: 100%; border: none;"></iframe>
+                    <iframe allow="microphone; camera" src="https://meet.jit.si/dznetvoice" style="height: 400px; width: 100%; border: none;"></iframe>
                 </div>
 
-                <div class="bg-white/5 p-4 rounded-[2rem] border border-white/10">
+                <div class="bg-white/5 p-6 rounded-[2.5rem] border border-white/10 shadow-inner">
                     
-                    <div class="section-title text-red-500">⚽ BEIN SPORTS ARABIC</div>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
-                        <button onclick="smartChange('http://fr.ottv.pro/live/4476647188407159/4476647188407159/27111.m3u8')" class="channel-btn btn-sport">BEIN HD 1</button>
-                        <button onclick="smartChange('http://fr.ottv.pro/live/4476647188407159/4476647188407159/400056.m3u8')" class="channel-btn btn-sport">BEIN HD 2</button>
-                        <button onclick="smartChange('http://fr.ottv.pro/live/4476647188407159/4476647188407159/27099.m3u8')" class="channel-btn btn-sport">BEIN 1 FHD</button>
-                        <button onclick="smartChange('http://fr.ottv.pro/live/4476647188407159/4476647188407159/27109.m3u8')" class="channel-btn btn-sport">BEIN HD 3</button>
-                        <button onclick="smartChange('http://fr.ottv.pro/live/4476647188407159/4476647188407159/27107.m3u8')" class="channel-btn btn-sport">BEIN HD 4</button>
-                        <button onclick="smartChange('http://fr.ottv.pro/live/4476647188407159/4476647188407159/27105.m3u8')" class="channel-btn btn-sport">BEIN HD 6</button>
+                    <div class="section-title text-red-500">⚽ BEIN SPORTS AR (Auto-Sync)</div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <button onclick="playAuto('27111')" class="channel-btn btn-sport">⚽ BEIN HD 1</button>
+                        <button onclick="playAuto('400056')" class="channel-btn btn-sport">⚽ BEIN HD 2</button>
+                        <button onclick="playAuto('27099')" class="channel-btn btn-sport">🏆 BEIN 1 FHD</button>
+                        <button onclick="playAuto('27109')" class="channel-btn btn-sport">⚽ BEIN HD 3</button>
+                        <button onclick="playAuto('27107')" class="channel-btn btn-sport">⚽ BEIN HD 4</button>
+                        <button onclick="playAuto('27105')" class="channel-btn btn-sport">⚽ BEIN HD 6</button>
                     </div>
 
-                    <div class="section-title text-blue-400">💥 RAKUTEN ACTION</div>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                        <button onclick="smartChange('https://bca5a421a70c46ad911efd0a4767c4bf.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6075/master.m3u8')" class="channel-btn btn-movie">ACTION FIN</button>
-                        <button onclick="smartChange('https://284824cf70404fdfb6ddf9349009c710.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6066/master.m3u8')" class="channel-btn btn-movie">ACTION GER</button>
-                        <button onclick="smartChange('https://87f2e2e5e7624e3bad85da1ca2ed31a7.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6067/master.m3u8')" class="channel-btn btn-movie">ACTION ITA</button>
-                        <button onclick="smartChange('https://a9c57ec7ec5e4b7daeacc6316a0bb404.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6069/master.m3u8')" class="channel-btn btn-movie">ACTION ESP</button>
-                        <button onclick="smartChange('https://54045f0c40fd442c8b06df076aaf1e85.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6065/master.m3u8')" class="channel-btn btn-movie">ACTION UK</button>
-                    </div>
-
-                    <div class="section-title text-yellow-500">🎭 COMEDY & DRAMA</div>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                        <button onclick="smartChange('https://9be783d652cd4b099cf63e1dc134c4a3.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6181/master.m3u8')" class="channel-btn btn-movie">COMEDY UK</button>
-                        <button onclick="smartChange('https://fee09fd665814f51b939b6d106cf5f66.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6093/master.m3u8')" class="channel-btn btn-movie">DRAMA UK</button>
-                        <button onclick="smartChange('https://cbb622b29f5d43b598991f3fa19de291.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5985/master.m3u8')" class="channel-btn btn-movie">TOP MOVIES GER</button>
-                        <button onclick="smartChange('https://4aa9ef08b70d4b0c8f3519c5950b1930.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6303/master.m3u8')" class="channel-btn btn-movie">NORDIC FILMS</button>
+                    <div class="section-title text-blue-400">🎬 RAKUTEN PREMIUM MOVIES</div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <button onclick="playSafe('https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8')" class="channel-btn btn-movie">TOP MOVIES UK</button>
+                        <button onclick="playSafe('https://54045f0c40fd442c8b06df076aaf1e85.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6065/master.m3u8')" class="channel-btn btn-movie">ACTION MOVIES</button>
+                        <button onclick="playSafe('https://9be783d652cd4b099cf63e1dc134c4a3.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6181/master.m3u8')" class="channel-btn btn-movie">COMEDY UK</button>
+                        <button onclick="playSafe('https://fee09fd665814f51b939b6d106cf5f66.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6093/master.m3u8')" class="channel-btn btn-movie">DRAMA MOVIES</button>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-black/60 p-4 rounded-[2.5rem] border border-white/5 h-[800px] flex flex-col">
+            <div class="bg-black/60 p-5 rounded-[2.5rem] border border-blue-500/10 h-[850px] flex flex-col backdrop-blur-3xl shadow-2xl">
                 <div id="box" class="flex-grow overflow-y-auto pr-2"></div>
                 <div class="flex gap-2 mt-4">
-                    <input id="m" type="text" placeholder="اكتب هنا..." class="w-full bg-blue-900/20 p-4 rounded-2xl outline-none border border-blue-500/10 text-lg">
-                    <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-black text-2xl">➤</button>
+                    <input id="m" type="text" placeholder="أرسل رسالة..." class="w-full bg-blue-900/20 p-5 rounded-2xl outline-none border border-blue-500/10 text-lg">
+                    <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-black text-2xl active:scale-90">➤</button>
                 </div>
             </div>
         </div>
@@ -99,19 +90,36 @@
     <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
     <script>
         const p = videojs('live-player');
-        function smartChange(url) {
-            if (url.startsWith('http://')) window.open(url, '_blank');
-            else { p.src({type: 'application/x-mpegURL', src: url}); p.play(); }
+
+        // --- إعدادات السيرفر الأوتوماتيكي (سيرفر شفيق) ---
+        const IPTV_SERVER = "http://fr.ottv.pro";
+        const IPTV_USER = "4476647188407159";
+        const IPTV_PASS = "4476647188407159";
+
+        // وظيفة التشغيل الأوتوماتيكي لقنوات الرياضة (HTTP)
+        function playAuto(channelID) {
+            const finalURL = `${IPTV_SERVER}/live/${IPTV_USER}/${IPTV_PASS}/${channelID}.m3u8`;
+            // فتح في نافذة جديدة لتجاوز حماية HTTPS في Render
+            window.open(finalURL, '_blank');
         }
+
+        // وظيفة التشغيل داخل الموقع للقنوات الآمنة (HTTPS)
+        function playSafe(url) {
+            p.src({type: 'application/x-mpegURL', src: url});
+            p.play();
+        }
+
+        // نظام الدردشة
         async function load() {
             const r = await fetch('/api/chat'); const d = await r.json();
             document.getElementById('box').innerHTML = d.map(m => `
                 <div class="bubble">
                     <div class="text-[10px] font-black text-blue-400 uppercase mb-1">${m.user}</div>
-                    <div class="text-white">${m.text}</div>
+                    <div class="text-white font-medium">${m.text}</div>
                 </div>`).join('');
             document.getElementById('box').scrollTop = document.getElementById('box').scrollHeight;
         }
+
         async function send() {
             const i = document.getElementById('m'); if(!i.value) return;
             await fetch('/api/chat', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({msg: i.value})});
