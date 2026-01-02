@@ -1,18 +1,19 @@
 import os
 import random
+import shutil
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
-app.secret_key = "dz_connect_sovereign_2025"
+app.secret_key = "dz_connect_sovereign_2025" # جيد للنموذج الأولي
 
-# --- معالجة مجلد الصوت ---
+# --- إعداد مسارات المجلدات ---
 static_path = os.path.join(app.root_path, 'static')
 audio_path = os.path.join(static_path, 'audio')
 
 if not os.path.exists(static_path):
     os.makedirs(static_path)
 
-# حماية في حال كان ملفاً
+# معالجة ذكية لمنع توقف زر التسجيل (كما فعلت أنت)
 if os.path.exists(audio_path) and not os.path.isdir(audio_path):
     os.remove(audio_path)
 
@@ -20,25 +21,14 @@ if not os.path.exists(audio_path):
     os.makedirs(audio_path)
 
 app.config['UPLOAD_FOLDER'] = audio_path
-
-# --- سجل الشات ---
 chat_history = []
 
-# --- دوال مساعدة اللعبة (سيتم استدعاؤها من الصفحة) ---
-def init_deck_logic():
-    deck = []
-    for i in range(7):
-        for j in range(i, 7):
-            deck.append({'t': i, 'b': j})
-    random.shuffle(deck)
-    return deck
-
-# --- Routes ---
+# --- الصفحات (Routes) ---
 @app.route('/')
 def index(): return render_template('index.html')
 
 @app.route('/join')
-def join(): return render_template('index.html')
+def join(): return render_template('register.html')
 
 @app.route('/verify')
 def verify(): return render_template('verify.html')
@@ -53,31 +43,27 @@ def hub():
     if 'nickname' not in session: return redirect(url_for('join'))
     return render_template('hub.html')
 
-@app.route('/arena')
-def arena():
-    if 'nickname' not in session: return redirect(url_for('join'))
-    return render_template('arena.html')
-
-# --- API Auth ---
+# --- منطق التحقق (API) ---
 @app.route('/api/auth', methods=['POST'])
 def auth():
-    data = request.get_json(silent=True)
-    if not data: return jsonify({"status": "error", "message": "Bad Request"}), 400
+    data = request.get_json(silent=True) # استخدام silent لتجنب الأخطاء
+    if not data:
+        return jsonify({"status": "error", "message": "Bad Request"}), 400
         
     nick = data.get('nickname', '').strip()
     phone = data.get('phone', '').strip()
     
-    # تنظيف الرقم
+    # تنظيف الرقم وتوحيده
     clean_phone = phone.replace('+213', '').replace(' ', '')
     if clean_phone.startswith('0'): clean_phone = clean_phone[1:]
     
-    # شرط الرقم
+    # شرط الرقم الجزائري
     is_valid = len(clean_phone) == 9 and clean_phone[0] in ['5', '6', '7']
     
     if not is_valid:
         return jsonify({"status": "error", "message": "Invalid Algerian Number!"}), 403
 
-    # حماية الأدمن
+    # حماية اسمك المستعار
     if nick.lower() == "misterai" and clean_phone != "554014890": 
         return jsonify({"status": "error", "message": "Admin Reserved!"}), 403
     
@@ -101,25 +87,33 @@ def finalize():
         return jsonify({"status": "success", "url": "/hub"})
     return jsonify({"status": "error", "message": "Invalid Request"}), 400
 
-# --- API Chat ---
+# --- منطق الشات وتسجيل الصوت (تحسين الاستقرار) ---
 @app.route('/api/chat', methods=['GET', 'POST'])
 def chat():
     if request.method == 'POST':
         user = session.get('nickname', 'Guest')
         is_admin = (user.lower() == "misterai")
         
+        # التعامل مع النصوص
         data = request.get_json(silent=True)
         if data:
             msg = data.get('msg')
             if msg: chat_history.append({"user": user, "text": msg, "admin": is_admin, "type": "text"})
+            
+        # التعامل مع الملفات الصوتية
         elif 'audio' in request.files:
             audio_file = request.files['audio']
             if audio_file:
+                # 1. استخراج الامتداد من الملف الأصلي (webm, ogg, etc.)
                 ext = os.path.splitext(audio_file.filename)[1]
-                if not ext: ext = '.webm'
+                if not ext: ext = '.webm' # افتراضي إذا لم يوجد
+                
+                # 2. تنظيف اسم المستخدم لمنع الأخطاء في حفظ الملف
                 safe_user = "".join(c for c in user if c.isalnum() or c in ('_', '-'))
+                
                 filename = f"{safe_user}_{random.randint(1000, 9999)}{ext}"
                 save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                
                 audio_file.save(save_path)
                 chat_history.append({
                     "user": user, 
@@ -128,12 +122,10 @@ def chat():
                     "type": "audio"
                 })
         
+        # الاحتفاظ بآخر 30 رسالة فقط
         if len(chat_history) > 30: chat_history.pop(0)
         return jsonify({"status": "ok"})
     return jsonify(chat_history)
 
-# --- تشغيل السيرفر (قيم ومستقر) ---
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    # استخدام host='0.0.0.0' ضروري للإنترنت
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(debug=True, port=5000)
