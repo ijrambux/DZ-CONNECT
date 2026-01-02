@@ -2,10 +2,11 @@ import os
 import random
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 
-# تأكد من وجود مكتبة socketio، إذا لم تكن موجودة لن يعمل السيرفر
+# استخدام وضع Threading بدلاً من eventlet للحد من أخطاء السيرفر المجاني
 try:
     from flask_socketio import SocketIO, emit, join_room
-    socketio = SocketIO(async_mode='eventlet', cors_allowed_origins='*', logger=False, engineio_logger=False)
+    # Threading mode is safer for standard hosting
+    socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading', logger=False, engineio_logger=False)
     HAS_SOCKETIO = True
 except ImportError:
     print("Error: flask-socketio is not installed. Please update requirements.txt")
@@ -22,10 +23,9 @@ if os.path.exists(audio_path) and not os.path.isdir(audio_path): os.remove(audio
 if not os.path.exists(audio_path): os.makedirs(audio_path)
 app.config['UPLOAD_FOLDER'] = audio_path
 
-# --- حالة الشات واللعبة (Global State) ---
+# --- حالة الشات واللعبة ---
 chat_history = []
 
-# حالة اللعبة المشتركة (إذا كان SocketIO موجود)
 if HAS_SOCKETIO:
     game_state = {
         "board": [],
@@ -38,7 +38,6 @@ if HAS_SOCKETIO:
 else:
     game_state = {}
 
-# --- دوال مساعدة اللعبة ---
 def generate_random_deck():
     deck = []
     for i in range(7):
@@ -49,10 +48,10 @@ def generate_random_deck():
 
 # --- الصفحات (Routes) ---
 @app.route('/')
-def index(): return render_template('register.html')
+def index(): return render_template('index.html') # الآن يبحث عن index.html
 
 @app.route('/join')
-def join(): return render_template('register.html')
+def join(): return render_template('index.html')
 
 @app.route('/verify')
 def verify(): return render_template('verify.html')
@@ -72,7 +71,7 @@ def arena():
     if 'nickname' not in session: return redirect(url_for('join'))
     return render_template('arena.html')
 
-# --- API Auth (نفس السابق) ---
+# --- API Auth ---
 @app.route('/api/auth', methods=['POST'])
 def auth():
     data = request.get_json(silent=True)
@@ -108,7 +107,7 @@ def finalize():
         return jsonify({"status": "success", "url": "/hub"})
     return jsonify({"status": "error", "message": "Invalid Request"}), 400
 
-# --- API Chat (نفس السابق) ---
+# --- API Chat ---
 @app.route('/api/chat', methods=['GET', 'POST'])
 def chat():
     if request.method == 'POST':
@@ -132,9 +131,8 @@ def chat():
         return jsonify({"status": "ok"})
     return jsonify(chat_history)
 
-# --- Socket.IO Events (Multiplayer) ---
+# --- Socket.IO Events (Stable Threading Mode) ---
 if HAS_SOCKETIO:
-
     @socketio.on('connect')
     def on_connect():
         print(f"Client connected: {request.sid}")
@@ -145,13 +143,11 @@ if HAS_SOCKETIO:
         username = data.get('username', 'Guest')
         join_room('arena')
         
-        # Logic: First = Blue, Second = Red, Rest = Spectators
         if len(game_state['players']) < 2:
             role = "Blue" if len(game_state['players']) == 0 else "Red"
             game_state['players'].append(request.sid)
             game_state['hands'][request.sid] = []
             
-            # Start game if 2 players
             if len(game_state['players']) == 2:
                 game_state['deck'] = generate_random_deck()
                 for p_sid in game_state['players']:
@@ -171,21 +167,16 @@ if HAS_SOCKETIO:
     @socketio.on('play_tile')
     def on_play(data):
         if game_state['turn'] != request.sid: return
-
         tile_id = data.get('id') 
-        # Find tile in hand
         hand = game_state['hands'][request.sid]
         
-        # Simple parsing of tile_id "1-5"
         try:
             t_val = int(tile_id.split('-')[0])
             b_val = int(tile_id.split('-')[1])
             played_tile = next((t for t in hand if t['t'] == t_val and t['b'] == b_val), None)
-        except:
-            return
+        except: return
 
         if not played_tile: return
-        
         l_val = game_state['board'][0]['tile']['t'] if game_state['board'] else None
         r_val = game_state['board'][-1]['tile']['b'] if game_state['board'] else None
         
@@ -209,14 +200,10 @@ if HAS_SOCKETIO:
         if played:
             hand.remove(played_tile)
             game_state['hands'][request.sid] = hand
-            
-            # Switch turn
             current_idx = game_state['players'].index(request.sid)
             next_idx = (current_idx + 1) % 2
             game_state['turn'] = game_state['players'][next_idx]
-            
             emit('game_state_update', game_state, room='arena')
-            
             if len(hand) == 0:
                 winner_role = "Blue" if current_idx == 0 else "Red"
                 emit('game_over', {'winner': winner_role}, room='arena')
@@ -226,17 +213,14 @@ if HAS_SOCKETIO:
         if game_state['turn'] != request.sid or len(game_state['deck']) == 0: return
         tile = game_state['deck'].pop()
         game_state['hands'][request.sid].append(tile)
-        
         current_idx = game_state['players'].index(request.sid)
         next_idx = (current_idx + 1) % 2
         game_state['turn'] = game_state['players'][next_idx]
-        
         emit('game_state_update', game_state, room='arena')
 
-# --- Run Server ---
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     if HAS_SOCKETIO:
-        socketio.run(app, host='0.0.0.0', port=port, debug=True)
+        socketio.run(app, host='0.0.0.0', port=port, debug=False, allow_unsafe_werkzeug=True)
     else:
-        app.run(host='0.0.0.0', port=port, debug=True)
+        app.run(host='0.0.0.0', port=port, debug=False)
