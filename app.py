@@ -5,18 +5,35 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 app = Flask(__name__, template_folder='templates', static_folder='static')
 app.secret_key = "dz_connect_sovereign_2025"
 
-# --- معالجة الصوت ---
+# --- معالجة مجلد الصوت ---
 static_path = os.path.join(app.root_path, 'static')
 audio_path = os.path.join(static_path, 'audio')
-if not os.path.exists(static_path): os.makedirs(static_path)
-if os.path.exists(audio_path) and not os.path.isdir(audio_path): os.remove(audio_path)
-if not os.path.exists(audio_path): os.makedirs(audio_path)
+
+if not os.path.exists(static_path):
+    os.makedirs(static_path)
+
+# حماية في حال كان ملفاً
+if os.path.exists(audio_path) and not os.path.isdir(audio_path):
+    os.remove(audio_path)
+
+if not os.path.exists(audio_path):
+    os.makedirs(audio_path)
+
 app.config['UPLOAD_FOLDER'] = audio_path
 
-# --- الشات (Chat State) ---
+# --- سجل الشات ---
 chat_history = []
 
-# --- الصفحات (Routes) ---
+# --- دوال مساعدة اللعبة (سيتم استدعاؤها من الصفحة) ---
+def init_deck_logic():
+    deck = []
+    for i in range(7):
+        for j in range(i, 7):
+            deck.append({'t': i, 'b': j})
+    random.shuffle(deck)
+    return deck
+
+# --- Routes ---
 @app.route('/')
 def index(): return render_template('index.html')
 
@@ -41,11 +58,12 @@ def arena():
     if 'nickname' not in session: return redirect(url_for('join'))
     return render_template('arena.html')
 
-# --- APIs ---
+# --- API Auth ---
 @app.route('/api/auth', methods=['POST'])
 def auth():
     data = request.get_json(silent=True)
     if not data: return jsonify({"status": "error", "message": "Bad Request"}), 400
+        
     nick = data.get('nickname', '').strip()
     phone = data.get('phone', '').strip()
     
@@ -55,7 +73,9 @@ def auth():
     
     # شرط الرقم
     is_valid = len(clean_phone) == 9 and clean_phone[0] in ['5', '6', '7']
-    if not is_valid: return jsonify({"status": "error", "message": "Invalid Algerian Number!"}), 403
+    
+    if not is_valid:
+        return jsonify({"status": "error", "message": "Invalid Algerian Number!"}), 403
 
     # حماية الأدمن
     if nick.lower() == "misterai" and clean_phone != "554014890": 
@@ -81,11 +101,13 @@ def finalize():
         return jsonify({"status": "success", "url": "/hub"})
     return jsonify({"status": "error", "message": "Invalid Request"}), 400
 
+# --- API Chat ---
 @app.route('/api/chat', methods=['GET', 'POST'])
 def chat():
     if request.method == 'POST':
         user = session.get('nickname', 'Guest')
         is_admin = (user.lower() == "misterai")
+        
         data = request.get_json(silent=True)
         if data:
             msg = data.get('msg')
@@ -105,11 +127,13 @@ def chat():
                     "admin": is_admin, 
                     "type": "audio"
                 })
+        
         if len(chat_history) > 30: chat_history.pop(0)
         return jsonify({"status": "ok"})
     return jsonify(chat_history)
 
-# --- تشغيل السيرفر ---
+# --- تشغيل السيرفر (قيم ومستقر) ---
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
+    # استخدام host='0.0.0.0' ضروري للإنترنت
     app.run(host='0.0.0.0', port=port, debug=False)
