@@ -9,119 +9,249 @@
     <style>
         body { 
             margin: 0; padding: 0;
-            background: #00050a url('https://pbs.twimg.com/media/G9hxJCiXkAAAomo?format=jpg&name=large') no-repeat center center fixed;
+            /* صورة الفأرة التكنولوجية كخلفية */
+            background: url('https://z-cdn-media.chatglm.cn/files/df4cae94-bae5-4bf1-8d51-54a2fb4429b7.jpg?auth_key=1867320284-a137d941c33b45ccabec0925b6873bf1-0-677147ce5499656f976e32cfdda66079') no-repeat center center fixed;
             background-size: cover;
             color: white; font-family: 'Cairo', sans-serif; 
+            min-height: 100vh;
         }
-        .brand { filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(160deg) brightness(118%) contrast(119%); font-weight: 900; }
         
-        /* تصميم بطاقة القناة الجديد */
-        .channel-card {
-            background: rgba(0, 0, 0, 0.7); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px; padding: 12px; text-align: center; transition: 0.3s;
-            backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; gap: 8px;
+        /* طبقة تعتيم خفيفة لضمان وضوح النصوص */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 10, 20, 0.4); /* لون أزرق داكن جداً ليتناسب مع الخلفية */
+            z-index: -1;
         }
-        .channel-card:hover { border-color: #ffd700; transform: translateY(-5px); }
         
-        /* أزرار التحكم داخل البطاقة */
-        .btn-play { background: #3b82f6; width: 100%; padding: 5px; border-radius: 10px; font-size: 10px; font-weight: 900; transition: 0.2s; }
-        .btn-play:hover { background: #2563eb; }
-        
-        .btn-external { background: #10b981; width: 100%; padding: 5px; border-radius: 10px; font-size: 10px; font-weight: 900; transition: 0.2s; }
-        .btn-external:hover { background: #059669; }
+        /* الشعار: متدرج الألوان ومتحرك */
+        .brand {
+            font-weight: 900;
+            background: linear-gradient(90deg, #00f2ff, #3b82f6, #ffd700);
+            background-size: 300% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: gradientMove 4s linear infinite;
+            text-shadow: 0px 0px 20px rgba(0, 242, 255, 0.4);
+        }
 
-        .section-title { font-size: 18px; font-weight: 900; margin: 30px 0 15px 0; color: #ffd700; border-right: 5px solid #ffd700; padding-right: 12px; }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* تصميم بطاقة القناة */
+        .channel-card {
+            background: rgba(0, 5, 10, 0.7); 
+            border: 1px solid rgba(0, 242, 255, 0.3); /* حدود سماوية */
+            border-radius: 20px; padding: 12px; text-align: center; transition: 0.3s;
+            backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; gap: 8px;
+            height: 100%; justify-content: space-between;
+        }
+        .channel-card:hover { 
+            border-color: #ffd700; 
+            transform: translateY(-5px); 
+            background: rgba(0, 5, 10, 0.9);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+        }
+        
+        /* زر التشغيل */
+        .btn-play { 
+            background: linear-gradient(45deg, #00f2ff, #0066ff); 
+            width: 100%; padding: 8px 5px; border-radius: 12px; 
+            font-size: 11px; font-weight: 900; transition: 0.2s; 
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 15px rgba(0, 242, 255, 0.3);
+        }
+        .btn-play:hover { background: linear-gradient(45deg, #0066ff, #003399); transform: scale(1.02); }
+
+        .channel-name {
+            font-size: 10px; font-weight: 900; 
+            line-height: 1.2; display: -webkit-box;
+            -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+            width: 100%;
+        }
+
+        .section-title { font-size: 18px; font-weight: 900; margin: 30px 0 15px 0; color: #00f2ff; border-right: 5px solid #00f2ff; padding-right: 12px; text-shadow: 0 0 10px rgba(0,242,255,0.5); }
         
         /* رسالة 2026 */
         #eidGreeting {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.7);
-            background: rgba(13, 27, 42, 0.96); color: #e0e1dd; border: 2px solid #ffd700;
-            border-radius: 30px; padding: 35px; box-shadow: 0 0 50px rgba(255, 215, 0, 0.4);
+            background: rgba(0, 5, 10, 0.98); color: #e0e1dd; border: 2px solid #00f2ff;
+            border-radius: 30px; padding: 35px; box-shadow: 0 0 50px rgba(0, 242, 255, 0.4);
             text-align: center; z-index: 9999; display: none; width: 500px; max-width: 90%;
-            backdrop-filter: blur(15px); transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(20px); transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         #eidGreeting.show { display: block; transform: translate(-50%, -50%) scale(1); }
-        #eidOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 9998; display: none; }
+        #eidOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9998; display: none; }
     </style>
 </head>
 <body class="p-4 md:p-8">
 
     <div id="eidOverlay"></div>
     <div id="eidGreeting">
-      <h2>✨ عام تعيد 2026 ✨</h2>
+      <h2>✨  2026 ✨</h2>
       <p> مرحبا بيك معنا 😄</p>
-      <button onclick="closeEidGreeting()" class="bg-yellow-500 text-black px-8 py-2 rounded-full font-black mt-4">دخول 🚀</button>
+      <button onclick="closeEidGreeting()" class="bg-cyan-400 text-black px-8 py-2 rounded-full font-black mt-4">دخول 🚀</button>
     </div>
 
     <div class="max-w-[1400px] mx-auto">
-        <header class="flex justify-between items-center mb-8 bg-black/50 p-5 rounded-3xl backdrop-blur-md border border-white/5">
+        <header class="flex justify-between items-center mb-8 bg-black/40 p-5 rounded-3xl backdrop-blur-md border border-cyan-500/30">
             <h1 class="brand text-4xl md:text-5xl">🅓🅩-🅒🅞🅝🅝🅔🅒🅣</h1>
-            <a href="http://fr.ottv.pro/get.php?username=4476647188407159&password=4476647188407159&type=m3u_plus&output=m3u8" 
-               class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-xl text-[10px] font-black shadow-lg transition-all">
-               📥 تحميل الملف الكامل
-            </a>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2">
                 
-                <div class="bg-black/30 p-6 md:p-10 rounded-[3rem] border border-white/10 backdrop-blur-md">
+                <div class="bg-black/20 p-6 md:p-10 rounded-[3rem] border border-cyan-500/20 backdrop-blur-md">
                     
+                    <!-- قسم beIN -->
                     <h2 class="section-title">🏆 beIN SPORTS MAX</h2>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
                         <div class="channel-card">
-                            <span class="text-xs font-black text-yellow-500">MAX 1 AR 4K</span>
+                            <span class="channel-name text-yellow-500">MAX 1 AR 4K</span>
                             <button onclick="openLink('432904')" class="btn-play">تشغيل مباشر</button>
-                            <button onclick="openExternal('432904')" class="btn-external">رابط خارجي 🔗</button>
                         </div>
                         <div class="channel-card">
-                            <span class="text-xs font-black">MAX 1 AR FHD</span>
+                            <span class="channel-name">MAX 1 AR FHD</span>
                             <button onclick="openLink('432903')" class="btn-play">تشغيل مباشر</button>
-                            <button onclick="openExternal('432903')" class="btn-external">رابط خارجي 🔗</button>
                         </div>
                         <div class="channel-card">
-                            <span class="text-xs font-black text-yellow-500">MAX 2 AR 4K</span>
+                            <span class="channel-name text-yellow-500">MAX 2 AR 4K</span>
                             <button onclick="openLink('432900')" class="btn-play">تشغيل مباشر</button>
-                            <button onclick="openExternal('432900')" class="btn-external">رابط خارجي 🔗</button>
                         </div>
                         <div class="channel-card">
-                            <span class="text-xs font-black">MAX 2 AR FHD</span>
+                            <span class="channel-name">MAX 2 AR FHD</span>
                             <button onclick="openLink('432899')" class="btn-play">تشغيل مباشر</button>
-                            <button onclick="openExternal('432899')" class="btn-external">رابط خارجي 🔗</button>
                         </div>
                     </div>
 
+                    <!-- قسم الجزائر -->
                     <h2 class="section-title">🇩🇿 ALGERIE | OTT</h2>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
                         <div class="channel-card">
-                            <span class="text-xs font-black">EL BILAD TV</span>
+                            <span class="channel-name">EL BILAD TV</span>
                             <button onclick="openLink('351100')" class="btn-play">تشغيل مباشر</button>
-                            <button onclick="openExternal('351100')" class="btn-external">رابط خارجي 🔗</button>
                         </div>
                         <div class="channel-card">
-                            <span class="text-xs font-black">ALGERIE 6</span>
+                            <span class="channel-name">ALGERIE 6</span>
                             <button onclick="openLink('327314')" class="btn-play">تشغيل مباشر</button>
-                            <button onclick="openExternal('327314')" class="btn-external">رابط خارجي 🔗</button>
                         </div>
                         <div class="channel-card">
-                            <span class="text-xs font-black">DZ PROG NAT</span>
+                            <span class="channel-name">DZ PROG NAT</span>
                             <button onclick="openLink('432888')" class="btn-play">تشغيل مباشر</button>
-                            <button onclick="openExternal('432888')" class="btn-external">رابط خارجي 🔗</button>
                         </div>
                         <div class="channel-card">
-                            <span class="text-xs font-black">A3 ALGERIE</span>
+                            <span class="channel-name">A3 ALGERIE</span>
                             <button onclick="openLink('1675')" class="btn-play">تشغيل مباشر</button>
-                            <button onclick="openExternal('1675')" class="btn-external">رابط خارجي 🔗</button>
                         </div>
                     </div>
+
+                    <!-- قسم Rakuten -->
+                    <h2 class="section-title">🎬 Rakuten Movies & Action</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-10">
+                        
+                        <div class="channel-card">
+                            <span class="channel-name">Top Movies UK</span>
+                            <button onclick="openLink('https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Action Movies Finland</span>
+                            <button onclick="openLink('https://bca5a421a70c46ad911efd0a4767c4bf.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6075/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Action Movies Germany</span>
+                            <button onclick="openLink('https://284824cf70404fdfb6ddf9349009c710.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6066/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Action Movies Italy</span>
+                            <button onclick="openLink('https://87f2e2e5e7624e3bad85da1ca2ed31a7.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6067/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Action Movies Spain</span>
+                            <button onclick="openLink('https://a9c57ec7ec5e4b7daeacc6316a0bb404.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6069/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Action Movies UK</span>
+                            <button onclick="openLink('https://54045f0c40fd442c8b06df076aaf1e85.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6065/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Comedy Movies Finland</span>
+                            <button onclick="openLink('https://a300af98e00746e2acf2346f43e47bd1.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6191/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Comedy Movies Germany</span>
+                            <button onclick="openLink('https://ecac08c9e2214375b907d6825aaf9a01.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6182/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Comedy Movies Italy</span>
+                            <button onclick="openLink('https://b8bc6c4b9be64bd6aeb3b92aa8521ed4.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6184/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Comedy Movies Spain</span>
+                            <button onclick="openLink('https://71db867f03ce4d71a29e92155f07ab87.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6180/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+
+                    </div>
+
+                    <!-- قسم Rakuten Drama -->
+                    <h2 class="section-title">🎭 Rakuten Drama & Top Movies</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        
+                        <div class="channel-card">
+                            <span class="channel-name">Comedy Movies UK</span>
+                            <button onclick="openLink('https://9be783d652cd4b099cf63e1dc134c4a3.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6181/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Drama Movies Finland</span>
+                            <button onclick="openLink('https://d7e8ee3c924d4305a0c1840fe94c5d36.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6102/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Drama Movies Germany</span>
+                            <button onclick="openLink('https://968754c2483045c1a9a7f677caec35b6.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6096/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Drama Movies Italy</span>
+                            <button onclick="openLink('https://f84e0b1628464fab846160df957f269e.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6094/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Drama Movies Spain</span>
+                            <button onclick="openLink('https://a7089c89d85f453d850c4a1518b43076.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6092/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Drama Movies UK</span>
+                            <button onclick="openLink('https://fee09fd665814f51b939b6d106cf5f66.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6093/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Nordic Films</span>
+                            <button onclick="openLink('https://4aa9ef08b70d4b0c8f3519c5950b1930.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6303/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Top Movies Finland</span>
+                            <button onclick="openLink('https://1d1b0d4cb6ae4c31985d13221795695b.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6057/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Top Movies Germany</span>
+                            <button onclick="openLink('https://cbb622b29f5d43b598991f3fa19de291.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5985/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+                        <div class="channel-card">
+                            <span class="channel-name">Top Movies Italy</span>
+                            <button onclick="openLink('https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8')" class="btn-play">تشغيل</button>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
 
-            <div class="bg-black/60 p-5 rounded-[3rem] border border-white/10 h-[800px] flex flex-col backdrop-blur-xl">
+            <div class="bg-black/40 p-5 rounded-[3rem] border border-cyan-500/20 h-[800px] flex flex-col backdrop-blur-xl">
                 <div id="box" class="flex-grow overflow-y-auto pr-2 space-y-2"></div>
                 <div class="flex gap-2 mt-4">
-                    <input id="m" type="text" placeholder="اكتب رسالة..." class="w-full bg-white/5 p-4 rounded-2xl outline-none">
-                    <button onclick="send()" class="bg-blue-600 px-6 rounded-2xl font-black">➤</button>
+                    <input id="m" type="text" placeholder="اكتب رسالة..." class="w-full bg-white/10 p-4 rounded-2xl outline-none text-white placeholder-gray-400 border border-cyan-500/30 focus:border-cyan-400">
+                    <button onclick="send()" class="bg-cyan-500 px-6 rounded-2xl font-black hover:bg-cyan-600 transition text-black">➤</button>
                 </div>
             </div>
         </div>
@@ -132,15 +262,13 @@
         const IPTV_PASS = "4476647188407159";
         const SERVER_BASE = "http://fr.ottv.pro/live";
 
-        // التشغيل المباشر (في نافذة جديدة)
-        function openLink(id) {
-            window.open(`${SERVER_BASE}/${IPTV_USER}/${IPTV_PASS}/${id}.m3u8`, '_blank');
-        }
-
-        // التشغيل الخارجي (فتح الرابط الخام)
-        function openExternal(id) {
-            const url = `${SERVER_BASE}/${IPTV_USER}/${IPTV_PASS}/${id}.m3u8`;
-            prompt("انسخ الرابط للمشغلات الخارجية:", url);
+        // دالة ذكية للتشغيل
+        function openLink(input) {
+            let finalUrl = input;
+            if (!input.startsWith('http')) {
+                finalUrl = `${SERVER_BASE}/${IPTV_USER}/${IPTV_PASS}/${input}.m3u8`;
+            }
+            window.open(finalUrl, '_blank');
         }
 
         window.onload = function() {
@@ -159,18 +287,22 @@
 
         // الدردشة
         async function load() {
-            const r = await fetch('/api/chat'); const d = await r.json();
-            document.getElementById('box').innerHTML = d.map(m => `
-                <div class="bg-white/5 p-3 rounded-xl text-right">
-                    <div class="text-[8px] text-blue-400 font-black uppercase">${m.user}</div>
-                    <div class="text-white text-xs">${m.text}</div>
-                </div>`).join('');
-            document.getElementById('box').scrollTop = document.getElementById('box').scrollHeight;
+            try {
+                const r = await fetch('/api/chat'); const d = await r.json();
+                document.getElementById('box').innerHTML = d.map(m => `
+                    <div class="bg-white/10 p-3 rounded-xl text-right border border-cyan-500/10">
+                        <div class="text-[8px] text-cyan-400 font-black uppercase">${m.user}</div>
+                        <div class="text-white text-xs">${m.text}</div>
+                    </div>`).join('');
+                document.getElementById('box').scrollTop = document.getElementById('box').scrollHeight;
+            } catch(e) {}
         }
         async function send() {
             const i = document.getElementById('m'); if(!i.value) return;
-            await fetch('/api/chat', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({msg: i.value})});
-            i.value = ''; load();
+            try {
+                await fetch('/api/chat', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({msg: i.value})});
+                i.value = ''; load();
+            } catch(e) {}
         }
         setInterval(load, 3000);
     </script>
