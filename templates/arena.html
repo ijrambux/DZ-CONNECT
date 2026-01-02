@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Arena | DZ-CONNECT</title>
+    <title>Neon Arena Tournament | 2v2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -17,41 +17,28 @@
         }
         body::before {
             content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 10, 20, 0.6); z-index: -1;
+            background: rgba(0, 10, 20, 0.7); z-index: -1;
         }
 
-        /* --- Domino Styles (تم تعديلها للأزرق اللامع) --- */
+        /* --- Dominoes --- */
         .tile {
             width: 50px; height: 100px;
             background: rgba(0, 10, 25, 0.95);
-            border: 1px solid #00f2ff; /* حدود سماوية لامعة */
+            border: 1px solid #00f2ff;
             border-radius: 8px;
             display: flex; flex-direction: column; justify-content: space-around; align-items: center;
-            cursor: pointer; 
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); /* توهج قوي */
-            transition: 0.2s;
-            position: relative;
+            cursor: pointer; box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); transition: 0.2s;
         }
-        .tile:hover { 
-            transform: translateY(-5px) scale(1.1); 
-            border-color: #ffffff; /* يتحول للأبيض عند المرور */
-            box-shadow: 0 0 25px rgba(0, 242, 255, 0.7); 
-            z-index: 10;
-        }
-        .tile.disabled { 
-            opacity: 0.3; pointer-events: none; border-color: #333; box-shadow: none; 
-        }
+        .tile:hover { transform: translateY(-5px) scale(1.1); border-color: #ffffff; z-index: 10; }
+        .tile.disabled { opacity: 0.3; pointer-events: none; border-color: #333; }
         .tile-horizontal { width: 100px; height: 50px; flex-direction: row; }
+        .dot { width: 8px; height: 8px; background: #00f2ff; border-radius: 50%; box-shadow: 0 0 8px #00f2ff; }
         
-        /* النقاط الزرقاء */
-        .dot { 
-            width: 8px; height: 8px; 
-            background: #00f2ff; 
-            border-radius: 50%; 
-            box-shadow: 0 0 8px #00f2ff; /* توهج النقاط */
-        }
+        /* Team Colors */
+        .tile.enemy-tile { border-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+        .tile.enemy-tile .dot { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
         
-        /* --- Chat Styles --- */
+        /* --- Chat & UI --- */
         audio { height: 30px; width: 100%; filter: invert(1) sepia(1) saturate(5) hue-rotate(175deg); }
         .mic-btn.recording { background: #ef4444; animation: pulse-rec 1.5s infinite; }
         @keyframes pulse-rec {
@@ -60,74 +47,112 @@
             100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
         #visualizer { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); width: 150px; height: 40px; pointer-events: none; z-index: 50; display: none; }
+
+        /* Emoji Picker */
+        .emoji-grid {
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px;
+            position: absolute; bottom: 60px; right: 10px;
+            background: rgba(0,0,0,0.9); border: 1px solid #333; padding: 10px; border-radius: 12px; z-index: 100;
+        }
+        .emoji-btn { font-size: 1.5rem; cursor: pointer; text-align: center; padding: 5px; border-radius: 5px; transition: 0.2s; }
+        .emoji-btn:hover { background: rgba(255,255,255,0.1); }
+
+        /* Tournament Mode Badge */
+        .mode-badge { background: linear-gradient(45deg, #f59e0b, #d97706); color: black; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
     </style>
 </head>
 <body class="flex flex-col h-screen">
 
     <!-- Header -->
-    <header class="flex justify-between items-center p-4 bg-black/40 backdrop-blur-md border-b border-cyan-500/20 z-50">
+    <header class="flex justify-between items-center p-4 bg-black/40 backdrop-blur-md border-b border-white/10 z-50">
         <div class="flex items-center gap-4">
-            <a href="/hub" class="text-gray-400 hover:text-white font-bold text-sm">← BACK TO HUB</a>
-            <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 uppercase tracking-widest">
-                NEON ARENA
-            </h1>
+            <a href="/hub" class="text-gray-400 hover:text-white font-bold text-sm">← HUB</a>
+            <div class="flex flex-col">
+                <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 uppercase tracking-widest">
+                    NEON ARENA
+                </h1>
+                <span class="mode-badge w-max">🏆 TOURNAMENT: 2v2</span>
+            </div>
         </div>
-        <div class="flex gap-4 text-xs font-bold">
-            <span class="text-cyan-400">PLAY: <span id="p-count">7</span></span>
-            <span class="text-gray-500">CPU: <span id="c-count">7</span></span>
+        <div class="flex gap-4 text-xs font-bold bg-black/30 px-4 py-2 rounded-xl border border-white/10">
+            <div class="text-blue-400 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-400"></span> BLUE TEAM: <span id="score-blue">0</span></div>
+            <div class="text-red-400 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-400"></span> RED TEAM: <span id="score-red">0</span></div>
         </div>
     </header>
 
     <!-- Main Grid -->
     <div class="flex-1 grid grid-cols-1 lg:grid-cols-4 overflow-hidden">
         
-        <!-- Game Section (Left - Larger) -->
+        <!-- Game Section (Left) -->
         <div class="lg:col-span-3 relative flex flex-col bg-black/20 m-4 rounded-3xl border border-white/5 backdrop-blur-md overflow-hidden">
             
-            <!-- CPU Area -->
-            <div class="h-20 flex justify-center gap-2 p-2 opacity-60 select-none">
-                <div id="cpu-hand" class="flex gap-1"></div>
+            <!-- Enemy Team (Top) -->
+            <div class="h-24 flex justify-center gap-8 p-2 opacity-70 select-none bg-red-900/10 border-b border-red-500/10">
+                <div class="text-center">
+                    <div class="text-[8px] text-red-400 font-bold mb-1">OPPONENT 1</div>
+                    <div id="cpu1-hand" class="flex gap-1"></div>
+                </div>
+                <div class="text-center">
+                    <div class="text-[8px] text-red-400 font-bold mb-1">OPPONENT 2</div>
+                    <div id="cpu2-hand" class="flex gap-1"></div>
+                </div>
             </div>
 
             <!-- Game Board -->
             <div class="flex-1 overflow-x-auto overflow-y-hidden p-4 flex items-center relative">
                 <div id="game-board" class="flex gap-1 min-w-max mx-auto transition-all duration-500"></div>
-                <div id="game-status" class="absolute top-2 left-1/2 -translate-x-1/2 bg-black/80 px-4 py-1 rounded-full border border-cyan-500 text-cyan-400 text-sm font-bold tracking-wider animate-pulse">
-                    YOUR TURN
+                <div id="game-status" class="absolute top-4 left-1/2 -translate-x-1/2 bg-black/90 px-6 py-2 rounded-full border-2 border-cyan-500 text-cyan-400 text-sm font-bold tracking-wider animate-pulse shadow-[0_0_20px_rgba(0,242,255,0.3)]">
+                    YOUR TURN (BLUE)
                 </div>
             </div>
 
-            <!-- Player Hand -->
-            <div class="h-40 bg-black/40 border-t border-white/10 p-4 relative">
-                <div id="player-hand" class="flex justify-center gap-3 overflow-x-auto pb-2"></div>
-                <button onclick="drawTile()" class="absolute bottom-4 left-4 w-12 h-12 rounded-xl bg-cyan-900 border border-cyan-500 text-white font-bold hover:bg-cyan-700 active:scale-95 shadow-lg">↻</button>
+            <!-- Player Team (Bottom) -->
+            <div class="h-40 bg-black/40 border-t border-blue-500/20 p-4 relative flex flex-col">
+                <div class="flex justify-between items-center mb-2 px-2">
+                    <div class="text-[8px] text-blue-400 font-bold tracking-widest">BLUE TEAM</div>
+                    <div class="text-[8px] text-gray-500 font-bold">PARTNER (CPU)</div>
+                </div>
+                
+                <div class="flex gap-4 items-end">
+                    <!-- Partner Hand (Face Down) -->
+                    <div class="w-1/4 h-16 flex justify-center gap-1 opacity-50" id="partner-hand"></div>
+                    
+                    <!-- Player Hand (Active) -->
+                    <div id="player-hand" class="flex-1 flex justify-center gap-3 overflow-x-auto pb-2"></div>
+                </div>
+
+                <button onclick="drawTile()" class="absolute bottom-4 left-4 w-12 h-12 rounded-xl bg-blue-900 border border-blue-500 text-white font-bold hover:bg-blue-700 active:scale-95 shadow-lg z-10">↻</button>
             </div>
         </div>
 
-        <!-- Chat Section (Right - Sidebar) -->
-        <div class="lg:col-span-1 bg-black/40 m-4 mt-4 lg:mt-4 mb-4 rounded-3xl border border-cyan-500/20 backdrop-blur-xl flex flex-col">
-            <!-- Messages -->
+        <!-- Chat Section (Right) -->
+        <div class="lg:col-span-1 bg-black/40 m-4 mt-4 lg:mt-4 mb-4 rounded-3xl border border-cyan-500/20 backdrop-blur-xl flex flex-col relative">
             <div id="chat-box" class="flex-1 overflow-y-auto p-4 space-y-4 pb-20">
-                <div class="text-center text-xs text-gray-500 font-bold mt-4">ARENA CHAT ACTIVE</div>
+                <div class="text-center text-xs text-gray-500 font-bold mt-4 border-b border-white/10 pb-2">TOURNAMENT CHAT</div>
             </div>
             
-            <!-- Input Area -->
             <div class="absolute bottom-8 right-8 w-full max-w-[300px] lg:max-w-none p-2">
-                <div class="bg-gray-900/80 backdrop-blur-xl border border-cyan-500/30 rounded-2xl p-2 flex items-center gap-2 shadow-[0_0_20px_rgba(0,242,255,0.1)]">
-                    
-                    <button id="mic-btn" onclick="toggleRecording()" class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-600 to-blue-700 flex items-center justify-center text-xl hover:scale-105 transition-all">
-                        🎤
-                    </button>
-                    
-                    <input id="msg-input" type="text" placeholder="Say something..." class="flex-grow bg-transparent border-none outline-none text-sm text-white font-bold">
-                    
-                    <button onclick="sendText()" class="w-8 h-8 rounded-lg bg-cyan-600 text-white text-xs font-bold hover:bg-cyan-500">➤</button>
+                <!-- Emoji Picker Toggle -->
+                <button onclick="toggleEmoji()" class="absolute bottom-16 left-2 text-2xl hover:scale-110 transition">😊</button>
+                <div id="emoji-picker" class="emoji-grid hidden">
+                    <div class="emoji-btn" onclick="addEmoji('😂')">😂</div>
+                    <div class="emoji-btn" onclick="addEmoji('🔥')">🔥</div>
+                    <div class="emoji-btn" onclick="addEmoji('🎮')">🎮</div>
+                    <div class="emoji-btn" onclick="addEmoji('🏆')">🏆</div>
+                    <div class="emoji-btn" onclick="addEmoji('💯')">💯</div>
+                    <div class="emoji-btn" onclick="addEmoji('❤️')">❤️</div>
+                    <div class="emoji-btn" onclick="addEmoji('😎')">😎</div>
+                    <div class="emoji-btn" onclick="addEmoji('👊')">👊</div>
+                    <div class="emoji-btn" onclick="addEmoji('👑')">👑</div>
+                    <div class="emoji-btn" onclick="addEmoji('⚡')">⚡</div>
                 </div>
 
-                <!-- Audio Visualizer (Hidden) -->
+                <div class="bg-gray-900/80 backdrop-blur-xl border border-cyan-500/30 rounded-2xl p-2 flex items-center gap-2 shadow-[0_0_20px_rgba(0,242,255,0.1)]">
+                    <button id="mic-btn" onclick="toggleRecording()" class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-600 to-blue-700 flex items-center justify-center text-xl hover:scale-105 transition-all">🎤</button>
+                    <input id="msg-input" type="text" placeholder="Say something..." class="flex-grow bg-transparent border-none outline-none text-sm text-white font-bold">
+                    <button onclick="sendText()" class="w-8 h-8 rounded-lg bg-cyan-600 text-white text-xs font-bold hover:bg-cyan-500">➤</button>
+                </div>
                 <canvas id="visualizer"></canvas>
-                
-                <!-- Preview Controls (Hidden) -->
                 <div id="preview-controls" class="hidden absolute bottom-14 right-2 flex gap-2">
                     <button onclick="cancelAudio()" class="text-red-500 text-xs font-bold px-2">✕</button>
                     <button onclick="sendAudio()" class="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">Send</button>
@@ -137,128 +162,214 @@
     </div>
 
     <script>
-        /* ================= GAME LOGIC (DOMINO) ================= */
-        const deck = []; let board = []; let pHand = [], cHand = []; let isTurn = true;
+        /* ================= TOURNAMENT LOGIC (2v2) ================= */
+        // Hands: 0=Player, 1=Partner(CPU), 2=Enemy1, 3=Enemy2
+        const hands = [[], [], [], []]; 
+        let board = [];
+        let turnIndex = 0; // 0=Player, 1=Partner, 2=Enemy1, 3=Enemy2
+        let deck = [];
         
+        let scoreBlue = 0;
+        let scoreRed = 0;
+
         function initDeck() {
             deck.length=0;
             for(let i=0;i<=6;i++) for(let j=i;j<=6;j++) deck.push({t:i,b:j,id:`${i}-${j}`});
+            shuffle(deck);
         }
         function shuffle(d){for(let i=d.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]];}}
         
-        function createTile(t, h=false){
+        function createTile(t, h=false, isEnemy=false){
             let d=document.createElement('div');
-            d.className=`tile ${h?'tile-horizontal':''}`;
-            // رسم النقاط (الآن ستظهر باللون الأزرق بسبب CSS)
+            d.className=`tile ${h?'tile-horizontal':''} ${isEnemy?'enemy-tile':''}`;
             let dots = '<div class="dot"></div>'.repeat(t.t) + (h?'':'<hr style="width:80%;border-color:rgba(0,242,255,0.3)">') + '<div class="dot"></div>'.repeat(t.b);
             d.innerHTML = dots;
             return d;
         }
-        
+
         function renderBoard(){
             const b=document.getElementById('game-board');
             b.innerHTML='';
             board.forEach(x=>{
-                let el=createTile(x.tile,true);
+                let el=createTile(x.tile,true, false); // Tiles on board are neutral color
                 if(x.f) el.style.transform='rotate(180deg)';
                 b.appendChild(el);
             });
         }
-        
+
         function renderHand(){
+            // Render Player Hand (Index 0)
             const h=document.getElementById('player-hand');
             h.innerHTML='';
-            pHand.forEach(t=>{
-                let el=createTile(t);
-                el.onclick=()=>playTile(t);
-                if(board.length>0){
-                    let l=board[0].tile.t, r=board[board.length-1].tile.b;
-                    if(t.t!=l && t.b!=l && t.t!=r && t.b!=r) el.classList.add('disabled');
-                }
+            hands[0].forEach(t=>{
+                let el=createTile(t, false, false);
+                el.onclick=()=>playTile(0, t);
+                if(board.length>0 && !canPlay(t)) el.classList.add('disabled');
                 h.appendChild(el);
             });
-            // Update CPU visual (backs)
-            const c=document.getElementById('cpu-hand');
-            c.innerHTML='';
-            for(let i=0;i<cHand.length;i++){
-                let div=document.createElement('div');
-                div.className='tile tile-center bg-gray-800 border-gray-600';
-                c.appendChild(div);
-            }
-            document.getElementById('p-count').innerText=pHand.length;
-            document.getElementById('c-count').innerText=cHand.length;
+
+            // Render Others (Backs)
+            ['cpu1-hand','partner-hand','cpu2-hand'].forEach((id, idx) => {
+                // Mapping IDs: 0->Player, 1->Partner, 2->Enemy1, 3->Enemy2
+                // IDs in HTML: cpu1(2), partner(1), cpu2(3)
+                let targetIdx = (id === 'cpu1-hand') ? 2 : (id === 'partner-hand' ? 1 : 3);
+                const c=document.getElementById(id);
+                c.innerHTML='';
+                for(let i=0;i<hands[targetIdx].length;i++){
+                    let div=document.createElement('div');
+                    div.className=`tile tile-center bg-gray-800 border-gray-600 ${targetIdx > 1 ? 'border-red-900/50' : 'border-blue-900/50'}`;
+                    c.appendChild(div);
+                }
+            });
         }
 
-        function playTile(t){
-            if(!isTurn) return;
+        function canPlay(t){
+            if(board.length===0) return true;
+            let l=board[0].tile.t, r=board[board.length-1].tile.b;
+            return (t.t===l||t.b===l||t.t===r||t.b===r);
+        }
+
+        function playTile(playerIdx, t){
             if(board.length===0){
                 board.push({tile:t,f:false});
-                pHand.splice(pHand.indexOf(t),1);
+                hands[playerIdx].splice(hands[playerIdx].indexOf(t),1);
                 endTurn(); return;
             }
             let l=board[0].tile.t, r=board[board.length-1].tile.b;
             let played=false;
-            // Try Right
             if(t.t===r){ board.push({tile:t,f:false}); played=true; }
             else if(t.b===r){ board.push({tile:t,f:true}); played=true; }
-            // Try Left
             else if(t.b===l){ board.unshift({tile:t,f:false}); played=true; }
             else if(t.t===l){ board.unshift({tile:t,f:true}); played=true; }
             
             if(played){
-                pHand.splice(pHand.indexOf(t),1);
+                hands[playerIdx].splice(hands[playerIdx].indexOf(t),1);
                 endTurn();
             }
         }
 
         function drawTile(){
-            if(!isTurn || deck.length===0) return;
-            let t=deck.pop(); pHand.push(t);
+            if(turnIndex !== 0 || deck.length===0) return;
+            if(hands[0].some(t=>canPlay(t))) return alert("لديك حركة!");
+            hands[0].push(deck.pop());
             renderHand();
         }
 
         function endTurn(){
             renderBoard(); renderHand();
-            if(pHand.length===0) { alert("YOU WIN!"); initGame(); return; }
-            isTurn=false;
-            document.getElementById('game-status').innerText="CPU THINKING...";
-            document.getElementById('game-status').className="absolute top-2 left-1/2 -translate-x-1/2 bg-black/80 px-4 py-1 rounded-full border border-red-500 text-red-400 text-sm font-bold tracking-wider animate-pulse";
-            setTimeout(cpuMove,1500);
+            checkTeamWin();
+            
+            // Move to next player in sequence 0->1->2->3->0
+            turnIndex = (turnIndex + 1) % 4;
+            
+            updateStatus();
+
+            // Logic for Teammates
+            if (turnIndex === 1 || turnIndex === 2 || turnIndex === 3) {
+                setTimeout(cpuPlay, 1500); // Delay for realism
+            }
         }
 
-        function cpuMove(){
+        function updateStatus(){
+            const st = document.getElementById('game-status');
+            if(turnIndex === 0 || turnIndex === 1) {
+                st.innerText = "BLUE TEAM TURN";
+                st.className = "absolute top-4 left-1/2 -translate-x-1/2 bg-black/90 px-6 py-2 rounded-full border-2 border-blue-500 text-blue-400 text-sm font-bold tracking-wider animate-pulse shadow-[0_0_20px_rgba(59,130,246,0.3)]";
+            } else {
+                st.innerText = "RED TEAM TURN";
+                st.className = "absolute top-4 left-1/2 -translate-x-1/2 bg-black/90 px-6 py-2 rounded-full border-2 border-red-500 text-red-400 text-sm font-bold tracking-wider animate-pulse shadow-[0_0_20px_rgba(239,68,68,0.3)]";
+            }
+        }
+
+        function cpuPlay(){
+            let tIdx = turnIndex; // 1 (Partner), 2 (Enemy1), or 3 (Enemy2)
+            let hand = hands[tIdx];
+            
+            if(hand.length === 0) return; // Should be handled by win check
+
             let l=board[0].tile.t, r=board[board.length-1].tile.b;
             let played=false;
-            for(let i=0;i<cHand.length;i++){
-                let t=cHand[i];
-                if(t.t===r){ board.push({tile:t,f:false}); cHand.splice(i,1); played=true; break; }
-                if(t.b===r){ board.push({tile:t,f:true}); cHand.splice(i,1); played=true; break; }
-                if(t.b===l){ board.unshift({tile:t,f:false}); cHand.splice(i,1); played=true; break; }
-                if(t.t===l){ board.unshift({tile:t,f:true}); cHand.splice(i,1); played=true; break; }
+
+            // Simple AI: Try to play first valid tile
+            for(let i=0;i<hand.length;i++){
+                let t=hand[i];
+                if(t.t===r){ board.push({tile:t,f:false}); hand.splice(i,1); played=true; break; }
+                if(t.b===r){ board.push({tile:t,f:true}); hand.splice(i,1); played=true; break; }
+                if(t.b===l){ board.unshift({tile:t,f:false}); hand.splice(i,1); played=true; break; }
+                if(t.t===l){ board.unshift({tile:t,f:true}); hand.splice(i,1); played=true; break; }
             }
+
             if(played){
-                renderBoard();
-                if(cHand.length===0){ alert("CPU WINS!"); initGame(); return; }
-            } else if(deck.length>0){
-                cHand.push(deck.pop()); renderHand();
-                setTimeout(cpuMove,1000);
+                renderBoard(); renderHand();
+                checkTeamWin();
+                endTurn(); // Move to next
             } else {
-                alert("CPU PASS");
+                // Draw
+                if(deck.length > 0){
+                    hand.push(deck.pop());
+                    renderHand();
+                    setTimeout(cpuPlay, 1000);
+                } else {
+                    // Pass
+                    endTurn();
+                }
             }
-            isTurn=true;
-            document.getElementById('game-status').innerText="YOUR TURN";
-            document.getElementById('game-status').className="absolute top-2 left-1/2 -translate-x-1/2 bg-black/80 px-4 py-1 rounded-full border border-cyan-500 text-cyan-400 text-sm font-bold tracking-wider animate-pulse";
         }
 
-        function initGame(){
-            initDeck(); shuffle(deck);
-            pHand=deck.splice(0,7); cHand=deck.splice(0,7); board=[];
-            isTurn=true; renderHand(); renderBoard();
+        function checkTeamWin(){
+            // Blue Team (0,1) wins if both empty
+            if(hands[0].length === 0 && hands[1].length === 0){
+                scoreBlue++;
+                document.getElementById('score-blue').innerText = scoreBlue;
+                alert("🏆 BLUE TEAM WINS! 🏆\nNew opponents entering...");
+                nextMatch(true); 
+            }
+            // Red Team (2,3) wins
+            if(hands[2].length === 0 && hands[3].length === 0){
+                scoreRed++;
+                document.getElementById('score-red').innerText = scoreRed;
+                alert("💀 RED TEAM WINS! 💀\nNew opponents entering...");
+                nextMatch(false);
+            }
         }
-        initGame();
+
+        function nextMatch(blueWon){
+            // Reset board
+            board = [];
+            turnIndex = 0;
+            initDeck();
+            
+            // Blue Team: Keep logic simple, reset hands
+            // Or if blue won, maybe keep one tile? Let's just shuffle all for simplicity
+            hands[0] = deck.splice(0,7); // Player
+            hands[1] = deck.splice(0,7); // Partner
+            
+            // Opponents: New fresh hands
+            hands[2] = deck.splice(0,7); 
+            hands[3] = deck.splice(0,7);
+            
+            renderHand(); renderBoard(); updateStatus();
+        }
+
+        // Init
+        initDeck();
+        hands[0] = deck.splice(0,7);
+        hands[1] = deck.splice(0,7);
+        hands[2] = deck.splice(0,7);
+        hands[3] = deck.splice(0,7);
+        renderHand();
 
 
-        /* ================= CHAT LOGIC (AUDIO) ================= */
+        /* ================= CHAT & EMOJIS ================= */
+        function toggleEmoji(){
+            document.getElementById('emoji-picker').classList.toggle('hidden');
+        }
+        function addEmoji(e){
+            document.getElementById('msg-input').value += e;
+            document.getElementById('msg-input').focus();
+        }
+
+        /* Existing Chat Code (Slightly adapted for brevity) */
         let rec, chunks, audioBlob, audioUrl, audioCtx, analyser, mic, scriptNode, isRec=false;
         const visCanvas=document.getElementById('visualizer'); const vCtx=visCanvas.getContext('2d');
 
@@ -270,19 +381,14 @@
                     mic=audioCtx.createMediaStreamSource(s); scriptNode=audioCtx.createScriptProcessor(2048,1,1);
                     analyser.smoothingTimeConstant=0.8; analyser.fftSize=512;
                     mic.connect(analyser); analyser.connect(scriptNode); scriptNode.connect(audioCtx.destination);
-                    
-                    scriptNode.onaudioprocess=()=>{
-                        let arr=new Uint8Array(analyser.frequencyBinCount); analyser.getByteFrequencyData(arr);
-                        drawVis(arr);
-                    };
-                    
+                    scriptNode.onaudioprocess=()=>{let arr=new Uint8Array(analyser.frequencyBinCount); analyser.getByteFrequencyData(arr); drawVis(arr);};
                     rec=new MediaRecorder(s); chunks=[];
                     rec.ondataavailable=e=>chunks.push(e.data);
                     rec.start(); isRec=true;
                     document.getElementById('mic-btn').classList.add('recording');
                     document.getElementById('preview-controls').classList.add('hidden');
                     visCanvas.style.display='block';
-                }catch(e){alert("Mic Error");}
+                }catch(e){}
             } else {
                 rec.stop(); isRec=false;
                 document.getElementById('mic-btn').classList.remove('recording');
@@ -292,36 +398,29 @@
                 document.getElementById('preview-controls').classList.remove('hidden');
             }
         }
-
         function drawVis(arr){
             vCtx.clearRect(0,0,visCanvas.width,visCanvas.height);
             vCtx.fillStyle='#00f2ff';
             let w=visCanvas.width/arr.length;
-            for(let i=0;i<arr.length;i++){
-                vCtx.fillRect(i*w,visCanvas.height-arr[i]/4,w,arr[i]/4);
-            }
+            for(let i=0;i<arr.length;i++){ vCtx.fillRect(i*w,visCanvas.height-arr[i]/4,w,arr[i]/4); }
         }
-
         function cancelAudio(){ audioBlob=null; document.getElementById('preview-controls').classList.add('hidden'); }
-        
         async function sendAudio(){
             if(!audioBlob) return;
             let fd=new FormData(); fd.append('audio', audioBlob, 'voice.webm');
             await fetch('/api/chat',{method:'POST',body:fd});
             cancelAudio(); loadMsg();
         }
-
         async function sendText(){
             let i=document.getElementById('msg-input');
             if(!i.value) return;
             await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({msg:i.value})});
             i.value=''; loadMsg();
         }
-
         async function loadMsg(){
             try{
                 let r=await fetch('/api/chat'); let d=await r.json();
-                let b=document.getElementById('chat-box'); b.innerHTML='';
+                let b=document.getElementById('chat-box'); b.innerHTML='<div class="text-center text-xs text-gray-500 font-bold mt-4 border-b border-white/10 pb-2">TOURNAMENT CHAT</div>';
                 d.forEach(m=>{
                     let div=document.createElement('div');
                     if(m.type=='audio'){
@@ -336,7 +435,6 @@
             }catch(e){}
         }
         setInterval(loadMsg,3000);
-
     </script>
 </body>
 </html>
