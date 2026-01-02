@@ -1,166 +1,127 @@
-<!DOCTYPE html>
-<html lang="ar" dir="ltr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Identity | DZ-CONNECT</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        /* خلفية الصفحة (صورة الفأرة) */
-        body { 
-            margin: 0; padding: 0;
-            background: url('https://z-cdn-media.chatglm.cn/files/df4cae94-bae5-4bf1-8d51-54a2fb4429b7.jpg?auth_key=1867320284-a137d941c33b45ccabec0925b6873bf1-0-677147ce5499656f976e32cfdda66079') no-repeat center center fixed;
-            background-size: cover;
-            color: white; 
-            font-family: 'Cairo', sans-serif;
-            min-height: 100vh;
-        }
+import os
+import random
+import shutil
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 
-        /* طبقة التعتيم */
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 10, 20, 0.5);
-            z-index: -1;
-        }
+app = Flask(__name__, template_folder='templates', static_folder='static')
+app.secret_key = "dz_connect_sovereign_2025"
 
-        /* البطاقة الزجاجية */
-        .glass-card {
-            background: rgba(0, 5, 10, 0.7);
-            border: 1px solid rgba(0, 242, 255, 0.3);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 0 40px rgba(0, 242, 255, 0.1);
-            transition: 0.3s;
-        }
+# --- معالجة ذكية لمجلد الصوت ---
+static_path = os.path.join(app.root_path, 'static')
+audio_path = os.path.join(static_path, 'audio')
 
-        /* حقل الإدخال */
-        .pin-input {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            letter-spacing: 0.5em; /* مسافات بين الأرقام */
-            text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
-            transition: 0.3s;
-        }
-        .pin-input:focus {
-            background: rgba(0, 0, 0, 0.5);
-            border-color: #00f2ff;
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
-            outline: none;
-        }
+if not os.path.exists(static_path):
+    os.makedirs(static_path)
 
-        /* زر التحقق */
-        .btn-verify {
-            background: linear-gradient(45deg, #00f2ff, #0066ff);
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
-            transition: 0.3s;
-        }
-        .btn-verify:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.6);
-        }
-        .btn-verify:active:not(:disabled) {
-            transform: translateY(0);
-        }
-        .btn-verify:disabled {
-            background: #333;
-            cursor: not-allowed;
-            box-shadow: none;
-            opacity: 0.7;
-        }
+# حذف الملف الخاطئ وتحويله لمجلد
+if os.path.exists(audio_path) and not os.path.isdir(audio_path):
+    os.remove(audio_path)
 
-        /* أيقونة القفل */
-        .lock-icon {
-            background: rgba(0, 242, 255, 0.1);
-            border: 1px solid rgba(0, 242, 255, 0.3);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
-        }
-    </style>
-</head>
-<body class="flex items-center justify-center min-h-screen p-4">
+if not os.path.exists(audio_path):
+    os.makedirs(audio_path)
 
-    <div class="glass-card w-full max-w-sm p-10 rounded-[2.5rem] text-center">
+app.config['UPLOAD_FOLDER'] = audio_path
+chat_history = []
+
+@app.route('/')
+def index(): return render_template('register.html')
+
+@app.route('/join')
+def join(): return render_template('register.html')
+
+@app.route('/verify')
+def verify(): return render_template('verify.html')
+
+@app.route('/settings')
+def settings():
+    if 'temp_nick' not in session: return redirect(url_for('join'))
+    return render_template('settings.html')
+
+@app.route('/hub')
+def hub():
+    if 'nickname' not in session: return redirect(url_for('join'))
+    return render_template('hub.html')
+
+@app.route('/arena')
+def arena():
+    if 'nickname' not in session: return redirect(url_for('join'))
+    return render_template('arena.html')
+
+# --- API Routes ---
+@app.route('/api/auth', methods=['POST'])
+def auth():
+    data = request.get_json(silent=True)
+    if not data: return jsonify({"status": "error", "message": "Bad Request"}), 400
         
-        <!-- أيقونة القفل المتوهجة -->
-        <div class="w-16 h-16 mx-auto rounded-full lock-icon flex items-center justify-center mb-8">
-            <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-        </div>
+    nick = data.get('nickname', '').strip()
+    phone = data.get('phone', '').strip()
+    
+    # تنظيف الرقم
+    clean_phone = phone.replace('+213', '').replace(' ', '')
+    if clean_phone.startswith('0'): clean_phone = clean_phone[1:]
+    
+    # شرط الرقم الجزائري
+    is_valid = len(clean_phone) == 9 and clean_phone[0] in ['5', '6', '7']
+    
+    if not is_valid:
+        return jsonify({"status": "error", "message": "Invalid Algerian Number!"}), 403
 
-        <h3 class="text-cyan-400 font-bold mb-2 uppercase tracking-widest text-xs">Security Check</h3>
-        <h2 class="text-2xl font-black mb-6 text-white uppercase">Verify Identity</h2>
-        <p class="text-gray-400 text-xs mb-8">Enter the 4-digit code sent to your device</p>
+    # حماية الأدمن
+    if nick.lower() == "misterai" and clean_phone != "554014890": 
+        return jsonify({"status": "error", "message": "Admin Reserved!"}), 403
+    
+    session['temp_nick'] = nick
+    session['temp_phone'] = "+213" + clean_phone
+    session['v_code'] = "1234"
+    return jsonify({"status": "success", "url": "/verify"})
 
-        <!-- حقل الكود -->
-        <input id="code" type="text" maxlength="4" placeholder="0000" 
-            class="pin-input w-full p-4 rounded-2xl text-center text-5xl font-black outline-none mb-8"
-            onfocus="this.select()" autocomplete="off">
+@app.route('/api/verify_code', methods=['POST'])
+def verify_code():
+    data = request.get_json(silent=True)
+    if data and str(data.get('code')) == str(session.get('v_code')):
+        return jsonify({"status": "success", "url": "/settings"})
+    return jsonify({"status": "error", "message": "Wrong Code!"}), 400
 
-        <!-- زر التحقق -->
-        <button id="btn" onclick="check()" class="btn-verify w-full py-4 rounded-2xl font-black text-lg uppercase tracking-widest text-white">
-            VERIFY 🛡️
-        </button>
-    </div>
+@app.route('/api/finalize', methods=['POST'])
+def finalize():
+    data = request.get_json(silent=True)
+    if data:
+        session['nickname'] = session.get('temp_nick')
+        return jsonify({"status": "success", "url": "/hub"})
+    return jsonify({"status": "error", "message": "Invalid Request"}), 400
 
-    <script>
-        // التركيز التلقائي على حقل الإدخال عند التحميل
-        window.onload = function() {
-            document.getElementById('code').focus();
-        };
+@app.route('/api/chat', methods=['GET', 'POST'])
+def chat():
+    if request.method == 'POST':
+        user = session.get('nickname', 'Guest')
+        is_admin = (user.lower() == "misterai")
+        
+        data = request.get_json(silent=True)
+        if data:
+            msg = data.get('msg')
+            if msg: chat_history.append({"user": user, "text": msg, "admin": is_admin, "type": "text"})
+        elif 'audio' in request.files:
+            audio_file = request.files['audio']
+            if audio_file:
+                ext = os.path.splitext(audio_file.filename)[1]
+                if not ext: ext = '.webm'
+                safe_user = "".join(c for c in user if c.isalnum() or c in ('_', '-'))
+                filename = f"{safe_user}_{random.randint(1000, 9999)}{ext}"
+                save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                audio_file.save(save_path)
+                chat_history.append({
+                    "user": user, 
+                    "audio_url": f"/static/audio/{filename}", 
+                    "admin": is_admin, 
+                    "type": "audio"
+                })
+        
+        if len(chat_history) > 30: chat_history.pop(0)
+        return jsonify({"status": "ok"})
+    return jsonify(chat_history)
 
-        // السماح بالضغط على Enter للإرسال
-        document.getElementById('code').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                check();
-            }
-        });
-
-        async function check() {
-            const input = document.getElementById('code');
-            const c = input.value;
-            const btn = document.getElementById('btn');
-
-            // تحقق بسيط من أن الكود مكون من 4 خانات
-            if(c.length < 4) {
-                input.style.borderColor = "red";
-                setTimeout(() => input.style.borderColor = "rgba(255,255,255,0.1)", 1000);
-                return;
-            }
-
-            // حالة التحميل
-            btn.innerText = "VERIFYING...";
-            btn.disabled = true;
-            input.disabled = true;
-
-            try {
-                const res = await fetch('/api/verify_code', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({code: c})
-                });
-                const data = await res.json();
-                
-                if(res.ok) {
-                    window.location.href = data.url;
-                } else {
-                    alert(data.message || "Invalid Code");
-                    // إعادة الزر لحالته الطبيعية
-                    btn.innerText = "VERIFY 🛡️";
-                    btn.disabled = false;
-                    input.disabled = false;
-                    input.focus();
-                    input.value = ""; // مسح الكود الخاطئ
-                }
-            } catch(e) {
-                alert("Connection Error! Please try again.");
-                btn.innerText = "VERIFY 🛡️";
-                btn.disabled = false;
-                input.disabled = false;
-                input.focus();
-            }
-        }
-    </script>
-</body>
-</html>
+# --- تشغيل السيرفر (الجزء المهم للإصلاح) ---
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    # host='0.0.0.0' ضروري للسيرفرات السحابية
+    app.run(host='0.0.0.0', port=port, debug=True)
